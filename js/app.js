@@ -39,17 +39,17 @@ let bdrRm2Rt;
 
 // === *** DECLARE BOUNDRIES *** === //
 
-game.setAttribute("height", "608");
-game.setAttribute("width", "1216");
+// game.setAttribute("height", "608");
+// game.setAttribute("width", "1216");
 // NOTE: This will set the gameBoard width and height dynamically with the width of the gameboard in the window.
-// game.setAttribute("height", getComputedStyle(game)["height"]);
-// game.setAttribute("width", getComputedStyle(game)["width"]);
+game.setAttribute("height", "908");
+game.setAttribute("width", "1216");
 
 class Entity {
     constructor(name, x, y, color, width, height, health, attack, weapon) {
         this.name = name;
         this.x = x * 32;
-        this.y = y * 32;
+        this.y = (y * 32) + 150;
         this.width = width * 32;
         this.height = height * 32;
         this.color = color;
@@ -80,7 +80,7 @@ class Lootable {
     constructor(type, x, y, color, width, height, locked, contains) {
         this.type = type;
         this.x = x * 32;
-        this.y = y * 32;
+        this.y = (y * 32) + 150;
         this.color = color;
         this.width = width * 32;
         this.height = height * 32;
@@ -98,7 +98,7 @@ class Boundry {
     constructor(name, x, y, width, height) {
         this.name = name
         this.x = x * 32;
-        this.y = y * 32;
+        this.y = (y * 32) + 150;
         this.height = height * 32;
         this.width = width * 32;
     }
@@ -108,7 +108,6 @@ class Boundry {
     }
 }
 
-// NOTE: set this with canvas or just css / js ? ∆
 // class UserInterface {
 //     constructor(x, y, height, width)
 // }
@@ -149,10 +148,11 @@ function startScreenTransition() {
         }
     }, 50);
     setTimeout( function() {
+        // change player.movementState = true;
         player.moveState = true;
+        // hide startscreen and buttons
         screen_start.style.display = "none";
     }, 1000);
-    // change player.movementState = true;
 };
 
 
