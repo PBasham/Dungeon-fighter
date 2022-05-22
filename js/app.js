@@ -22,6 +22,7 @@ let bdrMain6;
 let bdrMain7;
 let bdrMain8;
 
+
 // === *** DECLARE BOUNDRIES *** === //
 
 game.setAttribute("height", "608");
@@ -31,15 +32,16 @@ game.setAttribute("width", "1216");
 // game.setAttribute("width", getComputedStyle(game)["width"]);
 
 class Entity {
-    constructor(name, x, y, color, width, height, health, attack) {
+    constructor(name, x, y, color, width, height, health, attack, weapon) {
         this.name = name;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.x = x * 32;
+        this.y = y * 32;
+        this.width = width * 32;
+        this.height = height * 32;
         this.color = color;
         this.health = health;
         this.attack = attack;
+        this.weapon = this.weapon;
         this.haveKey = false;
         this.alive = true;
         this.moveState = true;
@@ -57,6 +59,23 @@ class Entity {
             // do another random number to check if you critical hit, which will make your damage 1.5 x attack.
         // TODO:
         // if defending, uses a static amount.
+    }
+}
+class Lootable {
+    constructor(type, x, y, color, width, height, locked, contains) {
+        this.type = type;
+        this.x = x * 32;
+        this.y = y * 32;
+        this.color = color;
+        this.width = width * 32;
+        this.height = height * 32;
+        this.locked = locked;
+        this.contains = contains;
+        this.visible = true;
+    }
+    render() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
 
@@ -83,9 +102,9 @@ class Boundry {
 window.addEventListener("DOMContentLoaded", function(e) {
     console.log("DOM has loaded!");
     // create and set entities on board
-    player = new Entity("Hero",96, 160, "blue", 32, 32, 10, 3);
-    orc = new Entity("Orc",608, 192, "darkGreen", 32, 32, 10, 3);
-    chest = new Entity("Chest",96, 448, "yellow", 64, 32, 10, 3);
+    player = new Entity("Hero",3, 5, "blue", 1, 1, 10, 3, "basic sword");
+    orc = new Entity("Orc",19, 6, "darkGreen", 1, 1, 10, 3, "mace");
+    chest = new Lootable("goldenChest",3, 14, "gold", 2, 1, false, "better Sword");
 
     // set boundries to walls
     setBoundaries()
@@ -146,11 +165,7 @@ function setBoundaries() {
     bdrMain6 = new Boundry("mainAreaBot3", 34, 10, 1, 1);
     bdrMain7 = new Boundry("mainAreaBotRt", 35, 9, 1, 1);
     bdrMain8 = new Boundry("mainAreaRt", 36, 3, 1, 6);
-    // bound9 = new Boundry(, , , );
-    // bound10 = new Boundry(, , , );
-    // bound11 = new Boundry(, , , );
-    // bound12 = new Boundry(, , , );
-    // bound13 = new Boundry(, , , );
+    
 }
 
 function renderBoundries() {
@@ -251,7 +266,7 @@ function gameLoop() {
     // adds all entities back if they are alive.
     player.alive === true ? player.render() : null;
     orc.alive === true ? orc.render() : null;
-    chest.alive === true ? chest.render() : null;
+    chest.visible === true ? chest.render() : null;
 
     // check if the player is touching a boundry
 
