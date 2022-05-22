@@ -4,6 +4,7 @@ let ctx = game.getContext("2d"); // NOTE: creates two dimensional canvas.
 
 let player;
 let orc;
+let orc2;
 let chest;
 let speed;
 let moveAmount = 32;
@@ -50,7 +51,7 @@ class Entity {
         this.health = health;
         this.attack = attack;
         this.weapon = this.weapon;
-        this.haveKey = false;
+        this.Keys = 0;
         this.alive = true;
         this.moveState = true;
         this.visible = true;
@@ -110,10 +111,14 @@ class Boundry {
 window.addEventListener("DOMContentLoaded", function(e) {
     console.log("DOM has loaded!");
     // create and set entities on board
-    player = new Entity("Hero",3, 5, "blue", 1, 1, 10, 3, "basic sword");
+    // create player
+    player = new Entity("Hero",3, 5, "blue", 1, 1, 10, 3, "basic-sword");
+    // create enemies
     orc = new Entity("Orc",19, 6, "darkGreen", 1, 1, 10, 3, "mace");
-    chest = new Lootable("goldenChest",3, 14, "gold", 2, 1, false, "better Sword");
-
+    orc2 = new Entity("Angry Orc", 17, 14, "#083a10", 1, 1,15, 11, "better-mace");
+    // create lootables
+    chest = new Lootable("Silver Chest",3, 14, "silver", 2, 1, false, "better-sword");
+    chest2 = new Lootable("Golden Chest", 18, 13, "gold", 1, 2, true, "even-better-sword");
     // set boundries to walls
     setBoundaries()
 
@@ -322,11 +327,13 @@ function gameLoop() {
     renderBoundries()
 
     // adds all entities back if they are alive.
-    player.alive === true ? player.render() : null;
     orc.alive === true ? orc.render() : null;
+    orc2.alive === true ? orc2.render() : null;
     chest.visible === true ? chest.render() : null;
-
-    // check if the player is touching a boundry
+    chest2.visible === true ? chest2.render() : null;
+    
+    // NOTE: Render player last so they appear ontop of other elements.
+    player.alive === true ? player.render() : null;
 
 }
 
