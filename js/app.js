@@ -134,10 +134,22 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
 start_btn.addEventListener("click", function() {
     console.log("Start Game!");
+    // make screen fade out then hide screen-start (display: none;)
+    setInterval(function() {
+        if (!screen_start.style.opacity) {
+            screen_start.style.opacity = 1;
+        }
+        if (screen_start.style.opacity > 0) {
+            screen_start.style.opacity -= 0.05;
+        } else {
+            clearInterval();
+        }
+    }, 50);
+    setTimeout( function() {
+        player.moveState = true;
+        screen_start.style.display = "none";
+    }, 1000);
     // change player.movementState = true;
-    player.moveState = true;
-    // hide screen-start (display: none; OR height: 0;)
-    screen_start.style.display = "none";
 });
 document.addEventListener("keydown", movementHandler);
 
