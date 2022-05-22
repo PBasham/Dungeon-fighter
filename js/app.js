@@ -109,27 +109,37 @@ function movementHandler(e) {
             //do that here
         // else return null
         // end if
-        if (checkBoundryCollison()) {
+        switch (e.key){
+            case "ArrowUp":
+                if (checkBoundryCollison("up")) {
             return null;
         }
-        switch (e.key){
-            case "ArrowUp": 
-            player.y -= moveAmount
+                player.y -= moveAmount
                 break;
             case "ArrowDown":
-            player.y += moveAmount
+                if (checkBoundryCollison("down")) {
+            return null;
+        }
+                player.y += moveAmount
     
                 break;
-            case "ArrowLeft": 
-            player.x -= moveAmount
+            case "ArrowLeft":
+                if (checkBoundryCollison("left")) {
+            return null;
+        }
+                player.x -= moveAmount
                 break;
             case "ArrowRight":
-            player.x += moveAmount
+                if (checkBoundryCollison("right")) {
+            return null;
+        }
+                player.x += moveAmount
                 break;
         }
     } else {
         // must be in a menu screen so so that logic??
     }
+    console.log(player);
 }
 
 function setBoundaries() {
@@ -155,22 +165,43 @@ function renderBoundries() {
     bound2.render();
 }
 
-function checkBoundryCollison() {
+function checkBoundryCollison(direction) {
     if (
-    checkBoundries(player, bound1) ||
-    checkBoundries(player, bound2)
+    checkBoundries(player, bound1, direction) ||
+    checkBoundries(player, bound2, direction)
     ) {
         return true;
     }
 }
 
-function checkBoundries(player, boundry){
+function checkBoundries(player, boundry, direction){
     // boolean to check if a boundry is being collided with
-    let collisionCheck =
-    player.y + player.height > boundry.y &&
-    player.y < boundry.y + boundry.height &&
-    player.x + player.width > boundry.x &&
-    player.x < boundry.x + boundry.width;
+    let collisionCheck;
+    if (direction === "up"){
+        // is player within my width
+        if (player.x >= boundry.x && 
+            player.x < boundry.x + boundry.width){
+                // check if the player is touching me
+                if (player.y > boundry.y + boundry.height + 1) {
+                    return false;
+                } else {
+                    return true;
+                }
+
+        }
+            
+        
+        // player.y > boundry.y + boundry.height + 1 ? collisionCheck = false : collisionCheck = true;
+    } else if (direction === "down"){
+        
+    } else if (direction === "left"){
+        
+    } else if (direction === "right"){
+        
+    }
+
+
+    
     if(collisionCheck) {
         console.log("collision detected");
         return true;
