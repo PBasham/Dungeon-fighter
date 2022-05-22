@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+
+:root {
+
+}
+*, 
+*::before, 
+*::after {
+    margin: 0;
+    padding: 0;
+}
+body { 
+    display: block;
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Righteous', cursive;;
+    background-color: lightblue;
+}
+#header {
+    margin-top: 32px;
+}
+#wrapper {
+    margin: 64px auto;
+    height: 608px;
+    width: 1216px;
+    border: 2px solid grey;
+    background-color: white;
+}
+#container {
+    background: url(/GA-Proj1-Dungeon-fighter/imgs/DF-cave.png);
+    /* background-position:; */
+    background-repeat: no-repeat;
+    background-size:contain;
+}

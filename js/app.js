@@ -1,6 +1,6 @@
 console.log("We're connected!");
-const gameboard = document.querySelector("#easle");
-const ctx = gameboard.getContext("2d");
+let game = document.querySelector("#game");
+let ctx = game.getContext("2d"); // NOTE: creates two dimensional canvas.
 
 let player;
 let orc;
@@ -10,6 +10,9 @@ let movementArea;
 let winner = false;
 let gameOver = false;
 
+
+game.setAttribute("height", "608");
+game.setAttribute("width", "1216");
 // NOTE: This will set the gameBoard width and height dynamically with the width of the gameboard in the window.
 // game.setAttribute("height", getComputedStyle(game)["height"]);
 // game.setAttribute("width", getComputedStyle(game)["width"]);
@@ -25,10 +28,11 @@ class Entity {
         this.health = health;
         this.attack = attack;
         this.haveKey = false;
+        this.visible = true;
     }
     // renders the square using the given parameters.
     render() {
-        ctx.fillStyle = "Blue";
+        ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
     takeTurn() {
@@ -42,14 +46,15 @@ class Entity {
 }
 
 // NOTE: set this with canvas or just css / js ? ∆
-class UserInterface {
-    constructor(x, y, height, width)
-}
+// class UserInterface {
+//     constructor(x, y, height, width)
+// }
 
 // load contents when DOM has loaded NOTE: or when start button is clicked??
 window.addEventListener("DOMContentLoaded", function(e) {
     console.log("DOM has loaded!");
     // create and set entities on board
+    
 })
     // run game loop
 
