@@ -54,9 +54,18 @@ class Entity {
 window.addEventListener("DOMContentLoaded", function(e) {
     console.log("DOM has loaded!");
     // create and set entities on board
+    player = new Entity("Hero",96, 160, "blue", 32, 32, 10, 3);
+    orc = new Entity("Orc",608, 192, "darkGreen", 32, 32, 10, 3);
+    chest = new Entity("Chest",96, 448, "yellow", 32, 32, 10, 3);
+
+    const runGame = setInterval(gameLoop, 120);
     
 })
-    // run game loop
-
+    // run game loop 
+function gameLoop() {
+    player.render()
+    orc.render()
+    chest.render()
+}
 
 // 
