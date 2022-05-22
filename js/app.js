@@ -27,6 +27,8 @@ let bdrMain5;
 let bdrMain6;
 let bdrMain7;
 let bdrMain8;
+let bdrMain9;
+let bdrMainTransition;
 let bdrTun1_1;
 let bdrTun1_2;
 let bdrRm2Lf1;
@@ -35,6 +37,8 @@ let bdrRm2Bot;
 let bdrRm2BtRt1;
 let bdrRm2BtRt2;
 let bdrRm2Rt;
+let bdrRm2Wtr1;
+let bdrRm2Wtr2;
 
 
 // === *** DECLARE BOUNDRIES *** === //
@@ -103,7 +107,7 @@ class Boundry {
         this.width = width * 32;
     }
     render() {
-        ctx.fillStyle = "grey";
+        ctx.fillStyle = "lavender";
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
@@ -200,7 +204,7 @@ function movementHandler(e) {
 }
 
 function setBoundaries() {
-    bdrMain1 = new Boundry("caveEntrance", 2, 3, 1, 6);
+    bdrMain1 = new Boundry("caveEntrance", 2, 3, 1, 2);
     bdrMain2 = new Boundry("mainAreaTop", 3, 2, 33, 1); 
     bdrMain3 = new Boundry("mainAreaBotLef", 3, 9, 1, 1);
     bdrMain4 = new Boundry("mainAreaBot1", 4, 10, 5, 1);
@@ -208,6 +212,8 @@ function setBoundaries() {
     bdrMain6 = new Boundry("mainAreaBot3", 34, 10, 1, 1);
     bdrMain7 = new Boundry("mainAreaBotRt", 35, 9, 1, 1);
     bdrMain8 = new Boundry("mainAreaRt", 36, 3, 1, 6);
+    bdrMain9 = new Boundry("mainAreaLf2", 2, 6, 1, 3);
+    bdrMainTransition = new Boundry("mainAreaTransition", 1, 5, 1, 1);
     bdrTun1_1 = new Boundry("tunLfWll", 8, 11, 1,3 );
     bdrTun1_2 = new Boundry("tunRtWll", 10, 11, 1,3 );
     bdrTun1Top1 = new Boundry("tunTop1", 5, 14, 4, 1);
@@ -224,6 +230,8 @@ function setBoundaries() {
     bdrRm2BtRt1 = new Boundry("Rm2BtRt1", 32, 17, 1, 1);
     bdrRm2BtRt2 = new Boundry("Rm2BtRt2", 33, 16, 1, 1);
     bdrRm2Rt = new Boundry("Rm2Rt", 34, 11, 1, 5);
+    bdrRm2Wtr1 = new Boundry("Rm2Wtr1", 27, 11, 4, 2);
+    bdrRm2Wtr2 = new Boundry("Rm2Wtr2", 32, 11, 2, 2);
     // bdr = new Boundry("", , , , );
     
 }
@@ -237,6 +245,8 @@ function renderBoundries() {
     bdrMain6.render();
     bdrMain7.render();
     bdrMain8.render();
+    bdrMain9.render();
+    bdrMainTransition.render();
     bdrTun1_1.render();
     bdrTun1_2.render();
     bdrTun1Top1.render();
@@ -253,6 +263,8 @@ function renderBoundries() {
     bdrRm2BtRt1.render();
     bdrRm2BtRt2.render();
     bdrRm2Rt.render();
+    bdrRm2Wtr1.render();
+    bdrRm2Wtr2.render();
 }
 
 function checkBoundryCollison(direction) {
@@ -265,6 +277,8 @@ function checkBoundryCollison(direction) {
     checkBoundries(player, bdrMain6, direction) ||
     checkBoundries(player, bdrMain7, direction) ||
     checkBoundries(player, bdrMain8, direction) ||
+    checkBoundries(player, bdrMain9, direction) ||
+    checkBoundries(player, bdrMainTransition, direction) ||
     checkBoundries(player, bdrTun1_1, direction) ||
     checkBoundries(player, bdrTun1_2, direction) ||
     checkBoundries(player, bdrTun1Top1, direction) ||
@@ -280,7 +294,9 @@ function checkBoundryCollison(direction) {
     checkBoundries(player, bdrRm2Bot, direction) ||
     checkBoundries(player, bdrRm2BtRt1, direction) ||
     checkBoundries(player, bdrRm2BtRt2, direction) ||
-    checkBoundries(player, bdrRm2Rt, direction) 
+    checkBoundries(player, bdrRm2Rt, direction) ||
+    checkBoundries(player, bdrRm2Wtr1, direction) ||
+    checkBoundries(player, bdrRm2Wtr2, direction)
     // checkBoundries(player, bdr, direction)
     ) {
         return true;
