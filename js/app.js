@@ -21,6 +21,8 @@ let bdrMain5;
 let bdrMain6;
 let bdrMain7;
 let bdrMain8;
+let bdrTun1_1;
+let bdrTun1_2;
 
 
 // === *** DECLARE BOUNDRIES *** === //
@@ -165,6 +167,17 @@ function setBoundaries() {
     bdrMain6 = new Boundry("mainAreaBot3", 34, 10, 1, 1);
     bdrMain7 = new Boundry("mainAreaBotRt", 35, 9, 1, 1);
     bdrMain8 = new Boundry("mainAreaRt", 36, 3, 1, 6);
+    bdrTun1_1 = new Boundry("tunLfWll", 8, 11, 1,3 );
+    bdrTun1_2 = new Boundry("tunRtWll", 10, 11, 1,3 );
+    bdrTun1Top1 = new Boundry("tunTop1", 5, 14, 4, 1);
+    bdrTun1Top2 = new Boundry("tunTop2", 3, 13, 2, 1);
+    bdrTun1Top3 = new Boundry("tunTop3", 10, 14, 4, 1);
+    bdrTun1Top4 = new Boundry("tunTop4", 15, 12, 4, 1);
+    bdrTun1Lf1 = new Boundry("tunLf1", 2, 14, 1, 2);
+    bdrTun1Lf2 = new Boundry("tunLf2", 14, 13, 1, 2);
+    bdrTun1Bot = new Boundry("tunBt", 3, 16, 16, 1);
+    bdrTun1Rt = new Boundry("tunRt", 19, 13, 1, 3);
+    // bdr = new Boundry("", , , , );
     
 }
 
@@ -177,6 +190,16 @@ function renderBoundries() {
     bdrMain6.render();
     bdrMain7.render();
     bdrMain8.render();
+    bdrTun1_1.render();
+    bdrTun1_2.render();
+    bdrTun1Top1.render();
+    bdrTun1Top2.render();
+    bdrTun1Top3.render();
+    bdrTun1Top4.render();
+    bdrTun1Lf1.render();
+    bdrTun1Lf2.render();
+    bdrTun1Bot.render();
+    bdrTun1Rt.render();
 }
 
 function checkBoundryCollison(direction) {
@@ -188,7 +211,18 @@ function checkBoundryCollison(direction) {
     checkBoundries(player, bdrMain5, direction) ||
     checkBoundries(player, bdrMain6, direction) ||
     checkBoundries(player, bdrMain7, direction) ||
-    checkBoundries(player, bdrMain8, direction)
+    checkBoundries(player, bdrMain8, direction) ||
+    checkBoundries(player, bdrTun1_1, direction) ||
+    checkBoundries(player, bdrTun1_2, direction) ||
+    checkBoundries(player, bdrTun1Top1, direction) ||
+    checkBoundries(player, bdrTun1Top2, direction) ||
+    checkBoundries(player, bdrTun1Top3, direction) ||
+    checkBoundries(player, bdrTun1Top4, direction) ||
+    checkBoundries(player, bdrTun1Lf1, direction) ||
+    checkBoundries(player, bdrTun1Lf2, direction) ||
+    checkBoundries(player, bdrTun1Bot, direction) ||
+    checkBoundries(player, bdrTun1Rt, direction)
+    // checkBoundries(player, bdr, direction)
     ) {
         return true;
     }
