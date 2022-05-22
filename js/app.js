@@ -6,6 +6,7 @@ let player;
 let orc;
 let chest;
 let speed;
+let moveAmount = 32;
 let movementArea;
 let winner = false;
 let gameOver = false;
@@ -28,6 +29,8 @@ class Entity {
         this.health = health;
         this.attack = attack;
         this.haveKey = false;
+        this.alive = true;
+        this.moveState = true;
         this.visible = true;
     }
     // renders the square using the given parameters.
@@ -61,11 +64,41 @@ window.addEventListener("DOMContentLoaded", function(e) {
     const runGame = setInterval(gameLoop, 120);
     
 })
+
+document.addEventListener("keydown", movementHandler);
+
+// allows the player to move around screen
+function movementHandler(e) {
+    //check if in move state
+    if (player.moveState === true) {
+        switch (e.key){
+            case "ArrowUp": 
+            player.y > 0 ? (player.y -= moveAmount) : null;
+                break;
+            case "ArrowDown":
+            player.y < game.height - player.height ? player.y += moveAmount : null;
+    
+                break;
+            case "ArrowLeft": 
+            player.x > 0 ? player.x -= moveAmount : null;
+                break;
+            case "ArrowRight":
+            player.x < game.width - player.width ? player.x += moveAmount : null;
+                break;
+        }
+    } else {
+        // must be in a menu screen so so that logic??
+    }
+}
+
     // run game loop 
 function gameLoop() {
-    player.render()
-    orc.render()
-    chest.render()
+    // clears all entities from screen
+    ctx.clearRect(0, 0, game.width, game.height);
+    // adds all entities back if they are alive.
+    player.alive === true ? player.render() : null;
+    orc.alive === true ? orc.render() : null;
+    chest.alive === true ? chest.render() : null;
 }
 
 // 
