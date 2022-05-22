@@ -198,14 +198,22 @@ function checkBoundries(player, boundry, direction){
                 if (player.y + player.height < boundry.y - 1 ||
                     player.y > boundry.y + boundry.height - 1) {
                     return false;
-                // NOTE: might not need this } else if (player.y - player.height < boundry.y){
-                //     return false;
                 } else {
                     return true;
                 }
         }
     } else if (direction === "left"){
-        
+        // if the player is withing my height
+        if (player.y >= boundry.y && 
+            player.y < boundry.y + boundry.height){
+                // check if the player is touching it
+                if (player.x > boundry.x + boundry.width + 1 ||
+                    player.x + player.width < boundry.x - 1) {
+                    return false;
+                } else {
+                    return true;
+                }
+        }
     } else if (direction === "right"){
         
     }
