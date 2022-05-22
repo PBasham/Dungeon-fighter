@@ -182,20 +182,28 @@ function checkBoundries(player, boundry, direction){
         if (player.x >= boundry.x && 
             player.x < boundry.x + boundry.width){
                 // check if the player is touching it
-                if (player.y > boundry.y + boundry.height + 1) {
+                if (player.y > boundry.y + boundry.height + 1 ||
+                    player.y - player.height < boundry.y) {
                     return false;
-                } else if (player.y - player.height < boundry.y){
-                    return false;
+                // NOTE: might not need this } else if (player.y - player.height < boundry.y){
+                //     return false;
                 } else {
                     return true;
                 }
-
         }
-            
-        
-        // player.y > boundry.y + boundry.height + 1 ? collisionCheck = false : collisionCheck = true;
     } else if (direction === "down"){
-        
+        if (player.x >= boundry.x && 
+            player.x < boundry.x + boundry.width){
+                // check if the player is touching it
+                if (player.y + player.height < boundry.y - 1 ||
+                    player.y > boundry.y + boundry.height - 1) {
+                    return false;
+                // NOTE: might not need this } else if (player.y - player.height < boundry.y){
+                //     return false;
+                } else {
+                    return true;
+                }
+        }
     } else if (direction === "left"){
         
     } else if (direction === "right"){
