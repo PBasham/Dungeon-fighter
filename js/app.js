@@ -67,7 +67,8 @@ class Entity {
 }
 
 class Boundry {
-    constructor(x, y, width, height) {
+    constructor(name, x, y, width, height) {
+        this.name = name
         this.x = x;
         this.y = y;
         this.height = height;
@@ -143,8 +144,8 @@ function movementHandler(e) {
 }
 
 function setBoundaries() {
-    bound1 = new Boundry(2*32, 3*32, 1*32, 6*32);
-    bound2 = new Boundry(3*32, 2*32, 33*32, 1*32);
+    bound1 = new Boundry("caveEntrance", 2*32, 3*32, 1*32, 6*32);
+    bound2 = new Boundry("mainAreaTop", 3*32, 2*32, 33*32, 1*32); 
     // const bound3 = new Boundry(, , , )
     // const bound4 = new Boundry(, , , )
     // const bound5 = new Boundry(, , , )
@@ -206,16 +207,25 @@ function checkBoundries(player, boundry, direction){
         // if the player is withing my height
         if (player.y >= boundry.y && 
             player.y < boundry.y + boundry.height){
-                // check if the player is touching it
+                // check if the player is touching it BUG:
                 if (player.x > boundry.x + boundry.width + 1 ||
-                    player.x + player.width < boundry.x - 1) {
+                    player.x + player.width < boundry.x + 1) {
                     return false;
                 } else {
                     return true;
                 }
         }
     } else if (direction === "right"){
-        
+        if (player.y >= boundry.y && 
+            player.y < boundry.y + boundry.height){
+                // check if the player is touching it
+                if (player.x + player.width < boundry.x - 1 ||
+                    player.x > boundry.x + boundry.width - 1) {
+                    return false;
+                } else {
+                    return true;
+                }
+        }
     }
 
 
