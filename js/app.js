@@ -2,6 +2,11 @@ console.log("We're connected!");
 let game = document.querySelector("#game");
 let ctx = game.getContext("2d"); // NOTE: creates two dimensional canvas.
 
+let start_btn = document.getElementById("startGame-btn");
+let screen_start = document.getElementById("screen-start");
+// let screen_win = document.getElementById("");
+// let screen_lose = document.getElementById("");
+
 let player;
 let orc;
 let orc2;
@@ -127,6 +132,13 @@ window.addEventListener("DOMContentLoaded", function(e) {
     
 })
 
+start_btn.addEventListener("click", function() {
+    console.log("Start Game!");
+    // change player.movementState = true;
+    player.moveState = true;
+    // hide screen-start (display: none; OR height: 0;)
+    screen_start.style.display = "none";
+});
 document.addEventListener("keydown", movementHandler);
 
 // allows the player to move around screen
