@@ -17,9 +17,9 @@ body {
     font-family: 'Righteous', cursive;
     background-color: lightcyan;
 }
-#header {
+/* #header {
     margin-top: 32px;
-}
+} */
 #wrapper {
     position: relative;
     margin: 64px auto;
@@ -29,9 +29,10 @@ body {
 }
 
 #screen-start {
+    display: none; // TEMP:
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     height: 908px;
     width: 1216px;
     background-color: lightblue;
@@ -40,12 +41,12 @@ body {
     background-repeat: no-repeat;
     background-size: contain; */
 }
-#screen-start::before {
+/* #screen-start::before {
     position: absolute;
     content: '';
     top: 0;
     left: 0;
-    height: 1008px;
+    height: 908px;
     width: 200px;
     background-color: black;
 }
@@ -54,10 +55,10 @@ body {
     content: '';
     top: 0;
     right: 0;
-    height: 1008px;
+    height: 908px;
     width: 200px;
     background-color: black;
-}
+} */
 
 #game-title {
     margin-top: 50px;
@@ -88,12 +89,20 @@ body {
     z-index: -2;
 } */
 
-/* #container {
-    display: grid;
-    grid-template-columns: 1216px;
-    grid-template-rows: 200px 608px 200px;
-    z-index: 1;
-} */
+
+#screen-fight {
+    position: absolute;
+    top: 0; 
+    right: 0;
+    height: 908px;
+    width: 1216px; 
+    /* background: url();
+    background-repeat: no-repeat;
+    background-size: contain; */
+    background-color: red;
+    z-index: 5;
+}
+
 #game {
     position: absolute;
     top: 0;
@@ -103,22 +112,18 @@ body {
     background-repeat: no-repeat;
     background-size: contain;
     background-color: black;
+    z-index: 1;
 }
 
-/* #fightScreen {
-    position: absolute;
-    background: url();
-    background-repeat: no-repeat;
-    background-size: contain;
-} */
 
 #game-info {
     position: absolute;
-    top: 0;
-    right: 0;
-    height: 200px;
-    width: 1216px;
+    top: 12.5px;
+    right: 12.5px;
+    height: 125px;
+    width: 1191px;
     background-color: darkblue;
+    z-index: 11;
 }
 #game-inventory {
     position: absolute;
@@ -127,6 +132,7 @@ body {
     height: 125px;
     width: 589.25px;
     background-color: darkblue;
+    z-index: 11;
 }
 #fight-btns {
     position: absolute;
@@ -135,6 +141,7 @@ body {
     height: 125px;
     width: 589.25px;
     background-color: darkblue;
+    z-index: 11;
 }
 
 .fightbutton {
