@@ -181,8 +181,10 @@ function checkBoundries(player, boundry, direction){
         // is player within my width
         if (player.x >= boundry.x && 
             player.x < boundry.x + boundry.width){
-                // check if the player is touching me
+                // check if the player is touching it
                 if (player.y > boundry.y + boundry.height + 1) {
+                    return false;
+                } else if (player.y - player.height < boundry.y){
                     return false;
                 } else {
                     return true;
