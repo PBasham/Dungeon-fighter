@@ -8,7 +8,7 @@ let orc2;
 let chest;
 let speed;
 let moveAmount = 32;
-let movementArea;
+// let movementArea;
 let winner = false;
 let gameOver = false;
 
@@ -52,8 +52,9 @@ class Entity {
         this.attack = attack;
         this.weapon = this.weapon;
         this.Keys = 0;
+        this.inFight = false;
         this.alive = true;
-        this.moveState = true;
+        this.moveState = false;
         this.visible = true;
     }
     // renders the square using the given parameters.
@@ -141,26 +142,26 @@ function movementHandler(e) {
                 if (checkBoundryCollison("up")) {
             return null;
         }
-                player.y -= moveAmount
+                player.y -= moveAmount;
                 break;
             case "ArrowDown":
                 if (checkBoundryCollison("down")) {
             return null;
         }
-                player.y += moveAmount
+                player.y += moveAmount;
     
                 break;
             case "ArrowLeft":
                 if (checkBoundryCollison("left")) {
             return null;
         }
-                player.x -= moveAmount
+                player.x -= moveAmount;
                 break;
             case "ArrowRight":
                 if (checkBoundryCollison("right")) {
             return null;
         }
-                player.x += moveAmount
+                player.x += moveAmount;
                 break;
         }
     } else {
@@ -268,8 +269,6 @@ function checkBoundries(player, boundry, direction){
                 if (player.y > boundry.y + boundry.height + 1 ||
                     player.y - player.height < boundry.y) {
                     return false;
-                // NOTE: might not need this } else if (player.y - player.height < boundry.y){
-                //     return false;
                 } else {
                     return true;
                 }
@@ -289,7 +288,7 @@ function checkBoundries(player, boundry, direction){
         // if the player is withing my height
         if (player.y >= boundry.y && 
             player.y < boundry.y + boundry.height){
-                // check if the player is touching it BUG:
+                // check if the player is touching it
                 if (player.x > boundry.x + boundry.width + 1 ||
                     player.x + player.width < boundry.x + 1) {
                     return false;
@@ -309,15 +308,26 @@ function checkBoundries(player, boundry, direction){
                 }
         }
     }
+}
 
+function engageEnemiesCheck() {
+    engageEnemyCheck(player, orc);
+    engageEnemyCheck(player, orc2);
+}
 
-    
-    if(collisionCheck) {
-        console.log("collision detected");
+function engageEnemyCheck(player, enemy) {
+    let hitTest =
+        player.y + player.height > enemy.y &&
+        player.y < enemy.y + enemy.height &&
+        player.x + player.width > enemy.x &&
+        player.x < enemy.x + enemy.width; // {boolean} : if all are true -> hit
+
+    if (hitTest) {
+        console.log("Engage Fight!");
+        player.inFight = true;
         return true;
     }
 }
-
     // run game loop 
 function gameLoop() {
     // clears all entities from screen
@@ -325,7 +335,10 @@ function gameLoop() {
 
     // set boundries
     renderBoundries()
-
+    // check to see if the player is currently in a fight.
+    if (player.inFight === false) {
+        engageEnemiesCheck();
+    }
     // adds all entities back if they are alive.
     orc.alive === true ? orc.render() : null;
     orc2.alive === true ? orc2.render() : null;
