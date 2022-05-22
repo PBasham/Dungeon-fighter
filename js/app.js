@@ -11,24 +11,18 @@ let movementArea;
 let winner = false;
 let gameOver = false;
 
-// === *** SET BOUNDRIES *** === //
+// === *** DECLARE BOUNDRIES *** === //
 // check to see where the player is, adjust the boundries accordingly.
-let bound1;
-let bound2;
-// const bound3 = new Boundry(, , , )
-// const bound4 = new Boundry(, , , )
-// const bound5 = new Boundry(, , , )
-// const bound6 = new Boundry(, , , )
-// const bound7 = new Boundry(, , , )
-// const bound8 = new Boundry(, , , )
-// const bound9 = new Boundry
-// const bound10 = new Boundry
-// const bound11 = new Boundry
-// const bound12 = new Boundry
-// const bound13 = new Boundry
-// const bound14 = new Boundry
-// const bound15 = new Boundry
-// === *** SET BOUNDRIES *** === //
+let bdrMain1;
+let bdrMain2;
+let bdrMain3;
+let bdrMain4;
+let bdrMain5;
+let bdrMain6;
+let bdrMain7;
+let bdrMain8;
+
+// === *** DECLARE BOUNDRIES *** === //
 
 game.setAttribute("height", "608");
 game.setAttribute("width", "1216");
@@ -69,10 +63,10 @@ class Entity {
 class Boundry {
     constructor(name, x, y, width, height) {
         this.name = name
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
+        this.x = x * 32;
+        this.y = y * 32;
+        this.height = height * 32;
+        this.width = width * 32;
     }
     render() {
         ctx.fillStyle = "grey";
@@ -91,7 +85,7 @@ window.addEventListener("DOMContentLoaded", function(e) {
     // create and set entities on board
     player = new Entity("Hero",96, 160, "blue", 32, 32, 10, 3);
     orc = new Entity("Orc",608, 192, "darkGreen", 32, 32, 10, 3);
-    chest = new Entity("Chest",96, 448, "yellow", 32, 32, 10, 3);
+    chest = new Entity("Chest",96, 448, "yellow", 64, 32, 10, 3);
 
     // set boundries to walls
     setBoundaries()
@@ -144,32 +138,42 @@ function movementHandler(e) {
 }
 
 function setBoundaries() {
-    bound1 = new Boundry("caveEntrance", 2*32, 3*32, 1*32, 6*32);
-    bound2 = new Boundry("mainAreaTop", 3*32, 2*32, 33*32, 1*32); 
-    // const bound3 = new Boundry(, , , )
-    // const bound4 = new Boundry(, , , )
-    // const bound5 = new Boundry(, , , )
-    // const bound6 = new Boundry(, , , )
-    // const bound7 = new Boundry(, , , )
-    // const bound8 = new Boundry(, , , )
-    // const bound9 = new Boundry
-    // const bound10 = new Boundry
-    // const bound11 = new Boundry
-    // const bound12 = new Boundry
-    // const bound13 = new Boundry
-    // const bound14 = new Boundry
-    // const bound15 = new Boundry
+    bdrMain1 = new Boundry("caveEntrance", 2, 3, 1, 6);
+    bdrMain2 = new Boundry("mainAreaTop", 3, 2, 33, 1); 
+    bdrMain3 = new Boundry("mainAreaBotLef", 3, 9, 1, 1);
+    bdrMain4 = new Boundry("mainAreaBot1", 4, 10, 5, 1);
+    bdrMain5 = new Boundry("mainAreaBot2", 10, 10, 17, 1);
+    bdrMain6 = new Boundry("mainAreaBot3", 34, 10, 1, 1);
+    bdrMain7 = new Boundry("mainAreaBotRt", 35, 9, 1, 1);
+    bdrMain8 = new Boundry("mainAreaRt", 36, 3, 1, 6);
+    // bound9 = new Boundry(, , , );
+    // bound10 = new Boundry(, , , );
+    // bound11 = new Boundry(, , , );
+    // bound12 = new Boundry(, , , );
+    // bound13 = new Boundry(, , , );
 }
 
 function renderBoundries() {
-    bound1.render();
-    bound2.render();
+    bdrMain1.render();
+    bdrMain2.render();
+    bdrMain3.render();
+    bdrMain4.render();
+    bdrMain5.render();
+    bdrMain6.render();
+    bdrMain7.render();
+    bdrMain8.render();
 }
 
 function checkBoundryCollison(direction) {
     if (
-    checkBoundries(player, bound1, direction) ||
-    checkBoundries(player, bound2, direction)
+    checkBoundries(player, bdrMain1, direction) ||
+    checkBoundries(player, bdrMain2, direction) ||
+    checkBoundries(player, bdrMain3, direction) ||
+    checkBoundries(player, bdrMain4, direction) ||
+    checkBoundries(player, bdrMain5, direction) ||
+    checkBoundries(player, bdrMain6, direction) ||
+    checkBoundries(player, bdrMain7, direction) ||
+    checkBoundries(player, bdrMain8, direction)
     ) {
         return true;
     }
