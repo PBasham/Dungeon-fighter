@@ -132,9 +132,12 @@ window.addEventListener("DOMContentLoaded", function(e) {
     
 })
 
-start_btn.addEventListener("click", function() {
+start_btn.addEventListener("click", startScreenTransition);
+
+function startScreenTransition() {
     console.log("Start Game!");
     // make screen fade out then hide screen-start (display: none;)
+    // a really cool fade effect to transition into the game from the menue when clicking start.
     setInterval(function() {
         if (!screen_start.style.opacity) {
             screen_start.style.opacity = 1;
@@ -142,7 +145,7 @@ start_btn.addEventListener("click", function() {
         if (screen_start.style.opacity > 0) {
             screen_start.style.opacity -= 0.05;
         } else {
-            clearInterval();
+            clearInterval(startScreenTransition);
         }
     }, 50);
     setTimeout( function() {
@@ -150,7 +153,9 @@ start_btn.addEventListener("click", function() {
         screen_start.style.display = "none";
     }, 1000);
     // change player.movementState = true;
-});
+};
+
+
 document.addEventListener("keydown", movementHandler);
 
 // allows the player to move around screen
