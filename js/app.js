@@ -6,6 +6,9 @@ let start_btn = document.getElementById("startGame-btn");
 let screen_start = document.getElementById("screen-start");
 // let screen_win = document.getElementById("");
 // let screen_lose = document.getElementById("");
+let game_info = document.getElementById("game-info");
+let game_inventory = document.getElementById("game-inventory");
+let fight_area = document.getElementById("fight-btns");
 
 let player;
 let orc;
@@ -137,6 +140,7 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
 start_btn.addEventListener("click", startScreenTransition);
 
+
 function startScreenTransition() {
     console.log("Start Game!");
     // make screen fade out then hide screen-start (display: none;)
@@ -145,17 +149,22 @@ function startScreenTransition() {
         if (!screen_start.style.opacity) {
             screen_start.style.opacity = 1;
         }
-        if (screen_start.style.opacity > 0) {
+            if 
+        (screen_start.style.opacity > 0) {
             screen_start.style.opacity -= 0.05;
         } else {
             clearInterval(startScreenTransition);
         }
     }, 50);
+    
     setTimeout( function() {
         // change player.movementState = true;
         player.moveState = true;
         // hide startscreen and buttons
         screen_start.style.display = "none";
+        game_info.style.opacity = 1;
+        game_inventory.style.opacity = 1;
+        fight_area.style.opacity = 1;
     }, 1000);
 };
 
