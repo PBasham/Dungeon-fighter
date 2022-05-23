@@ -54,7 +54,7 @@ game.setAttribute("height", "908");
 game.setAttribute("width", "1216");
 
 class Entity {
-    constructor(name, imgSrc, x, y, color, width, height, health, attack, weapon) {
+    constructor(name, imgSrc, x, y, color, width, height, health, attack, weapon, inventory) {
         this.name = name;
         this.x = x * 32;
         this.y = (y * 32) + 150;
@@ -64,11 +64,12 @@ class Entity {
         this.health = health;
         this.attack = attack;
         this.weapon = this.weapon;
+        this.inventory = inventory;
         this.Keys = 1;
         this.inFight = false;
         this.alive = true;
         this.moveState = false;
-        this.visible = true;
+        // this.visible = true;
         this.EntSprite = new Image(); 
         this.EntSprite.src = imgSrc;
     }
@@ -90,6 +91,7 @@ class Entity {
         // if defending, uses a static amount.
     }
 }
+
 class Lootable {
     constructor(type, imgSrc, x, y, rotate, color, width, height, locked, contains) {
         this.type = type;
@@ -145,10 +147,10 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 3, "basic-sword");
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 3, "basic-sword",[]);
     // create enemies
-    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 3, "mace");
-    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 11, "better-mace");
+    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 3, "mace", ["mace", "leather tunic"]);
+    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 11, "better-mace", ["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest_Closed.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest_Closed.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
@@ -400,7 +402,7 @@ function engageEnemyCheck(player, enemy) {
     player.x < enemy.x + enemy.width; // {boolean} : if all are true -> hit
     
     if (hitTest) {
-        console.log("Engage Fight!");
+        console.log(`Engage Fight!\n This enemy has ${enemy.inventory}`);
         player.inFight = true;
         // TODO: this should then change screen to fight screen and change player movementState to false.
         return true;
@@ -429,7 +431,7 @@ function looting(lootable) {
     }
     if (!lootable.locked){
         lootable.looted = true;
-        return console.log(`This chest contains ${lootable.contains}`);
+        return console.log(`You loot the chest and get ${lootable.contains}`);
     } else if (player.Keys > 0){
         player.Keys--;
         lootable.looted = true;
