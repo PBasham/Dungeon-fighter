@@ -203,36 +203,41 @@ function movementHandler(e) {
         // else return null
         // end if
         switch (e.key){
-            case "ArrowUp":
+            case "w":
                 if (checkBoundryCollison("up")) {
             return null;
         }
                 player.y -= moveAmount;
                 break;
-            case "ArrowDown":
+            case "s":
                 if (checkBoundryCollison("down")) {
             return null;
         }
                 player.y += moveAmount;
     
                 break;
-            case "ArrowLeft":
+            case "a":
                 if (checkBoundryCollison("left")) {
             return null;
         }
                 player.x -= moveAmount;
                 break;
-            case "ArrowRight":
+            case "d":
                 if (checkBoundryCollison("right")) {
             return null;
         }
                 player.x += moveAmount;
                 break;
         }
-    } else {
-        // must be in a menu screen so so that logic??
+        console.log(player);
+    } 
+    if (player.inFight) {
+        // hightlight one button, or the other
+        // if left arrow,  hightlight Attack
+        // if right arrow hightlight 
+
+
     }
-    console.log(player);
 }
 
 function setBoundaries() {
@@ -404,9 +409,29 @@ function engageEnemyCheck(player, enemy) {
     if (hitTest) {
         console.log(`Engage Fight!\nThis enemy has ${enemy.selectedWep} equiped.\nInventory:${enemy.inventory}`);
         player.inFight = true;
+        player.moveState = false;
         // TODO: this should then change screen to fight screen and change player movementState to false.
-        return true;
+        
     }
+}
+function fight(player, enemy){
+    // show fight buttons
+    // set any variables needed, 
+    let battleEnd = false;
+    // loop until someone dies
+    while(battleEnd){
+
+
+
+        console.log("Battle is happeing!")
+
+        battleEnd = true;
+    }
+
+    console.log("Player gets loot");
+    player.inFight = false
+    player.moveState = true;
+
 }
 function lootingDetect(){
     lootCheck(player, chest);

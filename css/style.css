@@ -29,7 +29,7 @@ body {
 }
 
 #screen-start {
-    display: none; /* TEMP: */
+    display: ; /* TEMP: */
     position: absolute;
     top: 0;
     left: 0;
@@ -71,17 +71,18 @@ body {
 
 
 #screen-fight {
-    display: none;
+    display: ;
     position: absolute;
     top: 0; 
     right: 0;
     height: 908px;
-    width: 1216px; 
-    /* background: url();
+    width: 0; 
+    background: url(/GA-Proj1-Dungeon-fighter/imgs/screen/fightscreen.png);
+    background-position:center ;
     background-repeat: no-repeat;
-    background-size: contain; */
-    background-color: red;
-    z-index: 0;
+    background-size: contain;
+    background-color: grey;
+    z-index: 6;
 }
 
 #topBar,
