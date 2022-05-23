@@ -54,7 +54,7 @@ game.setAttribute("height", "908");
 game.setAttribute("width", "1216");
 
 class Entity {
-    constructor(name, imgSrc, x, y, color, width, height, health, attack, weapon, inventory) {
+    constructor(name, imgSrc, x, y, color, width, height, health, attack, selectedWep, inventory) {
         this.name = name;
         this.x = x * 32;
         this.y = (y * 32) + 150;
@@ -63,7 +63,7 @@ class Entity {
         this.color = color;
         this.health = health;
         this.attack = attack;
-        this.weapon = this.weapon;
+        this.selectedWep = inventory[0];
         this.inventory = inventory;
         this.Keys = 1;
         this.inFight = false;
@@ -147,7 +147,7 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 3, "basic-sword",[]);
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 3, "basic-sword",["basic-sword"]);
     // create enemies
     orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 3, "mace", ["mace", "leather tunic"]);
     orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 11, "better-mace", ["better-mace", "leather pants"]);
@@ -402,7 +402,7 @@ function engageEnemyCheck(player, enemy) {
     player.x < enemy.x + enemy.width; // {boolean} : if all are true -> hit
     
     if (hitTest) {
-        console.log(`Engage Fight!\n This enemy has ${enemy.inventory}`);
+        console.log(`Engage Fight!\nThis enemy has ${enemy.selectedWep} equiped.\nInventory:${enemy.inventory}`);
         player.inFight = true;
         // TODO: this should then change screen to fight screen and change player movementState to false.
         return true;
