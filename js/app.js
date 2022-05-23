@@ -11,6 +11,7 @@ let game_inventory = document.getElementById("game-inventory");
 let fight_area = document.getElementById("fight-btns");
 
 let player;
+let playerSprite = ""
 let orc;
 let orc2;
 let chest;
@@ -53,7 +54,7 @@ game.setAttribute("height", "908");
 game.setAttribute("width", "1216");
 
 class Entity {
-    constructor(name, x, y, color, width, height, health, attack, weapon) {
+    constructor(name, imgSrc, x, y, color, width, height, health, attack, weapon) {
         this.name = name;
         this.x = x * 32;
         this.y = (y * 32) + 150;
@@ -63,16 +64,22 @@ class Entity {
         this.health = health;
         this.attack = attack;
         this.weapon = this.weapon;
-        this.Keys = 0;
+        this.Keys = 1;
         this.inFight = false;
         this.alive = true;
         this.moveState = false;
         this.visible = true;
+        this.EntSprite = new Image(); 
+        this.EntSprite.src = imgSrc;
     }
     // renders the square using the given parameters.
     render() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.EntSprite, this.x, this.y);
+    }
+    sprite() {
+
     }
     takeTurn() {
         // TODO:
@@ -84,20 +91,33 @@ class Entity {
     }
 }
 class Lootable {
-    constructor(type, x, y, color, width, height, locked, contains) {
+    constructor(type, imgSrc, x, y, rotate, color, width, height, locked, contains) {
         this.type = type;
         this.x = x * 32;
         this.y = (y * 32) + 150;
+        this.rotate = rotate;
         this.color = color;
         this.width = width * 32;
         this.height = height * 32;
         this.locked = locked;
         this.contains = contains;
+        this.looted = false;
         this.visible = true;
+        this.LotSprite = new Image(); 
+        this.LotSprite.src = imgSrc;
     }
+    
     render() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.save();
+        if (this.rotate > 0){
+            ctx.translate(this.x + this.width, this.y);
+            ctx.rotate((this.rotate + 90) * Math.PI/360);
+            ctx.translate(-this.x, -this.y);
+        }
+        // ctx.fillStyle = this.color;
+        // ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.LotSprite, this.x, this.y);
+        ctx.restore();
     }
 }
 
@@ -110,7 +130,7 @@ class Boundry {
         this.width = width * 32;
     }
     render() {
-        ctx.fillStyle = "lavender";
+        ctx.fillStyle = "transparent";
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
@@ -122,15 +142,16 @@ class Boundry {
 // load contents when DOM has loaded NOTE: or when start button is clicked??
 window.addEventListener("DOMContentLoaded", function(e) {
     console.log("DOM has loaded!");
+
     // create and set entities on board
     // create player
-    player = new Entity("Hero",3, 5, "blue", 1, 1, 10, 3, "basic-sword");
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 3, "basic-sword");
     // create enemies
-    orc = new Entity("Orc",19, 6, "darkGreen", 1, 1, 10, 3, "mace");
-    orc2 = new Entity("Angry Orc", 17, 14, "#083a10", 1, 1,15, 11, "better-mace");
+    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 3, "mace");
+    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 11, "better-mace");
     // create lootables
-    chest = new Lootable("Silver Chest",3, 14, "silver", 2, 1, false, "better-sword");
-    chest2 = new Lootable("Golden Chest", 18, 13, "gold", 1, 2, true, "even-better-sword");
+    chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest_Closed.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
+    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest_Closed.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
     // set boundries to walls
     setBoundaries()
 
@@ -369,19 +390,56 @@ function engageEnemiesCheck() {
     engageEnemyCheck(player, orc2);
 }
 
+
+
 function engageEnemyCheck(player, enemy) {
     let hitTest =
-        player.y + player.height > enemy.y &&
-        player.y < enemy.y + enemy.height &&
-        player.x + player.width > enemy.x &&
-        player.x < enemy.x + enemy.width; // {boolean} : if all are true -> hit
-
+    player.y + player.height > enemy.y &&
+    player.y < enemy.y + enemy.height &&
+    player.x + player.width > enemy.x &&
+    player.x < enemy.x + enemy.width; // {boolean} : if all are true -> hit
+    
     if (hitTest) {
         console.log("Engage Fight!");
         player.inFight = true;
+        // TODO: this should then change screen to fight screen and change player movementState to false.
         return true;
     }
 }
+function lootingDetect(){
+    lootCheck(player, chest);
+    lootCheck(player, chest2);
+}
+function lootCheck(player, lootable) {
+    let hitTest =
+        player.y + player.height > lootable.y &&
+        player.y < lootable.y + lootable.height &&
+        player.x + player.width > lootable.x &&
+        player.x < lootable.x + lootable.width; // {boolean} : if all are true -> hit
+
+    if (hitTest) {
+        looting(lootable);
+        return true;
+    }
+}
+
+function looting(lootable) {
+    if (lootable.looted) {
+        return console.log("Chest already looted");
+    }
+    if (!lootable.locked){
+        lootable.looted = true;
+        return console.log(`This chest contains ${lootable.contains}`);
+    } else if (player.Keys > 0){
+        player.Keys--;
+        lootable.looted = true;
+        return console.log(`You unlocked the chest!\nThis chest contains ${lootable.contains}\nYou have ${player.Keys} keys remainng.`);
+    } else {
+        return console.log("You need a key to open this chest!");
+    }
+}
+
+
     // run game loop 
 function gameLoop() {
     // clears all entities from screen
@@ -392,7 +450,9 @@ function gameLoop() {
     // check to see if the player is currently in a fight.
     if (player.inFight === false) {
         engageEnemiesCheck();
+        lootingDetect();
     }
+    
     // adds all entities back if they are alive.
     orc.alive === true ? orc.render() : null;
     orc2.alive === true ? orc2.render() : null;
