@@ -167,6 +167,7 @@ body {
     left: 12.5px;
     height: 125px;
     width: 589.25px;
+    user-select: none;
     background-color: var(--color-interface-areas);
     opacity: 0;
     z-index: 8;

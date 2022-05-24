@@ -65,6 +65,7 @@ class Entity {
         this.width = width * 32;
         this.height = height * 32;
         this.color = color;
+        this.maxHealth = maxHealth;
         this.health = health;
         this.attack = attack;
         this.selectedWep = inventory[0];
@@ -430,7 +431,7 @@ let objEnemyIntent = {"Intent": "", "for": 0};
 let enemyAttack;
 let enemyDefence = 0;
 // if enemy health is above 50%, odds are they will attack
-    if (enemy.health > enemyMaxHealth/2){
+    if (enemy.health > (enemy.maxHealth / 2)){
         // chose random number from 1 - 10, if  it's greater then 2.5 defend, else attack.
         if (randomTo100() >= 75) {
             // defend
@@ -445,14 +446,13 @@ let enemyDefence = 0;
             // get enemy attack from range
             console.log("calculating enemy attack.")
             enemyAttack = (enemy.attack[Math.floor(Math.random() * 2)]);
-            console.log(enemyAttack)
             // check to see if enemy will get a critical
             if( randomTo100() > 85) {
                 console.log("It's a critical!");
                 enemyAttack *= 1.5;
-                console.log(enemyAttack);
-                return objEnemyIntent = {"Intent": "attacking", "for": enemyAttack};
             }
+            console.log(`Enemy is attacking for ${enemyAttack}!`);
+            return objEnemyIntent = {"Intent": "attacking", "for": enemyAttack};
         }
     } else {
         // if below 50%, its a 50/50 chancee
@@ -477,6 +477,9 @@ let enemyDefence = 0;
         //         console.log(enemyAttack);
         //     }
         // }
+        console.log("Enemy is defending!");
+        enemyDefence = 3;
+        return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
     }
 }
 
@@ -486,14 +489,19 @@ function playerTurn(player, playerIntent) {
     if (player.inFight === false) {
         return;
     }
-    console.log("inside player turn!")
     // lock time for a few seconds? TODO:
     let objPlayerIntent = {"Intent": playerIntent, "for": 0};
     let playerAttack;
     let playerDefence = 0;
     if (playerIntent === "attacking") {
-        // player is attacking
-        playerAttack = player.attack;
+        // player is attacking BUG: get min and max of array and get number between then.
+        playerAttack = player.attack[Math.floor(Math.random() * 2)];
+        // check if player gets critical
+        if ((Math.floor(Math.random() * 100) > 85)){
+            playerAttack *= 1.5;
+        }
+
+
         objPlayerIntent.for = playerAttack;
     } else {
         // player is defending
@@ -501,7 +509,6 @@ function playerTurn(player, playerIntent) {
         objPlayerIntent.for = playerDefence;
     }
 
-    console.log(objPlayerIntent);
     return objPlayerIntent
     //calculate both player and bot
 
@@ -529,7 +536,42 @@ function battleScreenTransition() {
 
 
 
-function combatTurn(player, enemy) {
+function combatTurn(enemy, playerIntent, enemyIntent) {
+    let netDamage = 0;
+    if (playerIntent.Intent === "attacking") {
+        if (enemyIntent.Intent === "attacking"){
+            // both attacking, run players hit
+            console.log(`${enemy.name} is at ${enemy.health}hp`);
+            enemy.health -= playerIntent.for;
+            console.log(`You strike your enemy for ${playerIntent.for} damage!`);
+            // then check if enemy is killed
+            console.log(`${enemy.name} is at ${enemy.health}hp`);
+            // if not, run enemy hit
+        } else {
+            // enemy is defending,
+            // do enemy.health -= playerIntent.for - enemyIntent.for;
+            netDamage = playerIntent.for - enemyIntent.for;
+            if (netDamage > 0) {
+
+                console.log(`${enemy.name} is at ${enemy.health}hp`);
+                enemy.health -= playerIntent.for;
+                console.log(`You strike your enemy for ${playerIntent.for} damage!`);
+                // then check if enemy is killed
+                console.log(`${enemy.name} is at ${enemy.health}hp`);
+            } else {
+                console.log(`${enemy.name} blocked your attack!`)
+            }
+            // if enemy is dead, end combat, else, allow player to go again
+        }
+    } else {
+        // player is defending
+        if (enemyIntent === "defending") {
+            // both players blocking????
+        } else {
+            // player.health -= enemyIntent.for
+        }
+    }
+
 
 }
 // transition screen on √
@@ -544,55 +586,49 @@ function combatTurn(player, enemy) {
         // else get enemy intent then
         // wait for button click again
 
-attack_btn.addEventListener("click", handleClickAttack);
-
-defend_btn.addEventListener("click", handleClickDefend);
 
 
-function handleClickAttack(){
-    attack_btn.removeEventListener("click", handleClickAttack);
-    defend_btn.removeEventListener("click", handleClickDefend);
-    console.log("i've been disabled");
-    setTimeout(function() {
-        attack_btn.addEventListener("click", handleClickAttack);
-        console.log("I'm active again!");
-    }, 5000);
-    console.log("I was clicked!")
-    playerTurn(player, "attacking")   
-}
-function handleClickDefend(){
-    attack_btn.removeEventListener("click", handleClickAttack);
-    defend_btn.removeEventListener("click", handleClickDefend);
-    console.log("i've been disabled");
-    setTimeout(function() {
-        defend_btn.addEventListener("click", handleClickDefend);
-        console.log("I'm active again!");
-    }, 5000);
-    console.log("I was clicked!")
-    playerTurn(player, "blocking");
-}
-
-
+        
+        
 /****** FIGHT ******/
 function fight(player, enemy){
     // allow player to use buttons
-
-
-    let transition = false;
+    
+    attack_btn.addEventListener("click", handleClickAttack);
+    
+    defend_btn.addEventListener("click", handleClickDefend);
+    
     // transition to fight screen if it has not already started.
-    if (transition === false) {
-        battleScreenTransition();
-    }
-
+    battleScreenTransition();
+    
     console.log("Battle is happeing!")
-
+    
     let playerHealth = player.health;
     let enemyMaxHealth = enemy.health;
+    
+    
+    function handleClickAttack(){
+        attack_btn.removeEventListener("click", handleClickAttack);
+        defend_btn.removeEventListener("click", handleClickDefend);
+        setTimeout(function() {
+            attack_btn.addEventListener("click", handleClickAttack);
+        }, 2000);
 
-
-
-  
-        
+        combatTurn(enemy, playerTurn(player, "attacking"), enemyTurn(enemy));
+    
+    }
+    function handleClickDefend(){
+        attack_btn.removeEventListener("click", handleClickAttack);
+        defend_btn.removeEventListener("click", handleClickDefend);
+        setTimeout(function() {
+            defend_btn.addEventListener("click", handleClickDefend);
+        }, 2000);
+                combatTurn(enemy, playerTurn(player, "defending"), enemyTurn(enemy));
+            
+    }
+    
+    
+    
 
 
     // if (player looses all health) {
