@@ -10,6 +10,9 @@ let screen_fight = document.getElementById("screen-fight");
 let game_info = document.getElementById("game-info");
 let game_inventory = document.getElementById("game-inventory");
 let fight_area = document.getElementById("fight-btns");
+let fight_buttons = document.getElementsByClassName("fight-btn");
+let attack_btn = document.getElementById("attack-btn");
+let defend_btn = document.getElementById("defend-btn");
 
 let player;
 let playerSprite = ""
@@ -18,7 +21,7 @@ let orc2;
 let chest;
 let speed;
 let moveAmount = 32;
-// let movementArea;
+let battleTransition = false;
 let winner = false;
 let gameOver = false;
 
@@ -55,7 +58,7 @@ game.setAttribute("height", "908");
 game.setAttribute("width", "1216");
 
 class Entity {
-    constructor(name, imgSrc, x, y, color, width, height, health, attack, selectedWep, inventory) {
+    constructor(name, imgSrc, x, y, color, width, height, maxHealth, health, attack, selectedWep, inventory) {
         this.name = name;
         this.x = x * 32;
         this.y = (y * 32) + 150;
@@ -79,9 +82,6 @@ class Entity {
         // ctx.fillStyle = this.color;
         // ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.drawImage(this.EntSprite, this.x, this.y);
-    }
-    sprite() {
-
     }
     takeTurn() {
         // TODO:
@@ -148,10 +148,10 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 3, "basic-sword",["basic-sword"]);
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 10, [1,3], "basic-sword",["basic-sword"]);
     // create enemies
-    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 3, "mace", ["mace", "leather tunic"]);
-    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 11, "better-mace", ["better-mace", "leather pants"]);
+    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], "mace", ["mace", "leather tunic"]);
+    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,5], "better-mace", ["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest_Closed.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest_Closed.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
@@ -192,7 +192,7 @@ function startScreenTransition() {
     }, 1000);
 };
 
-
+// SECTION: Handling all player movement ========================================//
 document.addEventListener("keydown", movementHandler);
 
 // allows the player to move around screen
@@ -240,7 +240,7 @@ function movementHandler(e) {
 
     }
 }
-
+// SECTION: Setting boundaries ========================================//
 function setBoundaries() {
     bdrMain1 = new Boundry("caveEntrance", 2, 3, 1, 2);
     bdrMain2 = new Boundry("mainAreaTop", 3, 2, 33, 1); 
@@ -393,9 +393,12 @@ function checkBoundries(player, boundry, direction){
     }
 }
 
+// SECTION: Enemy Engagment ========================================//
 function engageEnemiesCheck() {
-    engageEnemyCheck(player, orc);
-    engageEnemyCheck(player, orc2);
+    if (player.inFight === false) {
+        engageEnemyCheck(player, orc);
+        engageEnemyCheck(player, orc2);
+    }
 }
 
 
@@ -407,60 +410,214 @@ function engageEnemyCheck(player, enemy) {
     player.x + player.width > enemy.x &&
     player.x < enemy.x + enemy.width; // {boolean} : if all are true -> hit
     
+    if (player.inFight === true) {
+        return null;
+    }
     if (hitTest) {
         console.log(`Engage Fight!\nThis enemy has ${enemy.selectedWep} equiped.\nInventory:${enemy.inventory}`);
-        player.inFight = true;
         // TODO: this should then change screen to fight screen and change player movementState to false.
         player.moveState = false;
-        
+        player.inFight = true;
         fight(player,enemy);
     }
 }
-function fight(player, enemy){
-    console.log(screen_fight.style.left);
+
+
+/*  ===        battle turns         === */
+function enemyTurn(enemy){
+// enemy shows intent
+let objEnemyIntent = {"Intent": "", "for": 0};
+let enemyAttack;
+let enemyDefence = 0;
+// if enemy health is above 50%, odds are they will attack
+    if (enemy.health > enemyMaxHealth/2){
+        // chose random number from 1 - 10, if  it's greater then 2.5 defend, else attack.
+        if (randomTo100() >= 75) {
+            // defend
+            console.log("Enemy is defending!");
+            enemyDefence = 3;
+            // show that the enemy is going to block this turn.
+            // show number within symbol?
+            return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
+        } else {
+            // attack
+            console.log("Enemy is attacking!");
+            // get enemy attack from range
+            console.log("calculating enemy attack.")
+            enemyAttack = (enemy.attack[Math.floor(Math.random() * 2)]);
+            console.log(enemyAttack)
+            // check to see if enemy will get a critical
+            if( randomTo100() > 85) {
+                console.log("It's a critical!");
+                enemyAttack *= 1.5;
+                console.log(enemyAttack);
+                return objEnemyIntent = {"Intent": "attacking", "for": enemyAttack};
+            }
+        }
+    } else {
+        // if below 50%, its a 50/50 chancee
+        console.log("They are nervous");
+        // if (randomTo100() > 50) {
+        //     // defend
+        //     console.log("Enemy is defending!");
+        //     enemyDefence = 3;
+        //     // show that the enemy is going to block this turn.
+        //     // show number within symbol?
+        // } else {
+        //     // attack
+        //     console.log("Enemy is attacking!");
+        //     // get enemy attack from range
+        //     console.log("calculating enemy attack.")
+        //     enemyAttack = (enemy.attack[Math.floor(Math.random() * 2)]);
+        //     console.log(enemyAttack)
+        //     // check to see if enemy will get a critical
+        //     if( randomTo100() > 85) {
+        //         console.log("It's a critical!");
+        //         enemyAttack *= 1.5;
+        //         console.log(enemyAttack);
+        //     }
+        // }
+    }
+}
+
+
+
+function playerTurn(player, playerIntent) {
+    if (player.inFight === false) {
+        return;
+    }
+    console.log("inside player turn!")
+    // lock time for a few seconds? TODO:
+    let objPlayerIntent = {"Intent": playerIntent, "for": 0};
+    let playerAttack;
+    let playerDefence = 0;
+    if (playerIntent === "attacking") {
+        // player is attacking
+        playerAttack = player.attack;
+        objPlayerIntent.for = playerAttack;
+    } else {
+        // player is defending
+        playerDefence = 3;
+        objPlayerIntent.for = playerDefence;
+    }
+
+    console.log(objPlayerIntent);
+    return objPlayerIntent
+    //calculate both player and bot
+
+    //if enemy looses all health, cancel their turn
+    // mark them as not alive 
+    // give player loot
+}
+/*  ===        End battle turns         === */
+
+function battleScreenTransition() {
+    battleTransition === true
     let counter = 1;
     let leftAmount = 1216;
-    // transition fightscreen onto game
-    // TODO: make the work FIGHT pop up, fasing in and out. Enlarging and decressing in size as well. LEFTOFF:
-    setInterval(function() {
+        setInterval(function() {
         if (counter >= 6) {
-            clearInterval(fight);
+            clearInterval(battleScreenTransition);
         } else {
             leftAmount -= 243.2;
             screen_fight.style.left = leftAmount + "px";
-            console.log(screen_fight.style.left);
-            console.log(counter++);
+            counter++;
         }
     }, 50);
-    
-    setTimeout( function() {
-        // change player.movementState = true;
-    }, 1000);
-    player.moveState = true;
-    // hide startscreen and buttons
-    screen_start.style.display = "none";
-    game_info.style.opacity = 1;
-    game_inventory.style.opacity = 1;
-    fight_area.style.opacity = 1;
-    
-    // show fight buttons
-    // set any variables needed, 
-    let battleEnd = false;
-    // loop until someone dies
-    while(!battleEnd){
+}
+// evey time a fight button is clicked, do player action, check if anyone is dead, then computer action, check if anyone is dead. if not allow to press again.
 
 
 
-        console.log("Battle is happeing!")
-
-        battleEnd = true;
-    }
-
-    console.log("Player gets loot");
-    player.inFight = false
-    player.moveState = true;
+function combatTurn(player, enemy) {
 
 }
+// transition screen on √
+// get enemy intent and show it
+
+// once button is clicked do action player picked, 
+    // if enemy died, end combat, reward player.
+    // else allow enemy turn with intent in response
+    // check if player is dead.
+        // if player === dead, lose
+
+        // else get enemy intent then
+        // wait for button click again
+
+attack_btn.addEventListener("click", handleClickAttack);
+
+defend_btn.addEventListener("click", handleClickDefend);
+
+
+function handleClickAttack(){
+    attack_btn.removeEventListener("click", handleClickAttack);
+    defend_btn.removeEventListener("click", handleClickDefend);
+    console.log("i've been disabled");
+    setTimeout(function() {
+        attack_btn.addEventListener("click", handleClickAttack);
+        console.log("I'm active again!");
+    }, 5000);
+    console.log("I was clicked!")
+    playerTurn(player, "attacking")   
+}
+function handleClickDefend(){
+    attack_btn.removeEventListener("click", handleClickAttack);
+    defend_btn.removeEventListener("click", handleClickDefend);
+    console.log("i've been disabled");
+    setTimeout(function() {
+        defend_btn.addEventListener("click", handleClickDefend);
+        console.log("I'm active again!");
+    }, 5000);
+    console.log("I was clicked!")
+    playerTurn(player, "blocking");
+}
+
+
+/****** FIGHT ******/
+function fight(player, enemy){
+    // allow player to use buttons
+
+
+    let transition = false;
+    // transition to fight screen if it has not already started.
+    if (transition === false) {
+        battleScreenTransition();
+    }
+
+    console.log("Battle is happeing!")
+
+    let playerHealth = player.health;
+    let enemyMaxHealth = enemy.health;
+
+
+
+  
+        
+
+
+    // if (player looses all health) {
+    //     they die, lose screen.
+    // } else {
+    let battleOver = false;
+    if (battleOver === true) {
+        //     once battle is over reset variables
+            console.log("Player gets loot");
+            player.inFight = false
+            player.moveState = true;
+            battleTransition = false
+            attack_btn.removeEventListener("onclick", playerTurn);
+            defend_btn.removeEventListener("onclick", playerTurn);
+    }
+
+}
+/****** FIGHT ******/
+
+function randomTo100(){
+    return (Math.floor(Math.random() * 100) + 1);
+}
+
+
+// SECTION: Looting ========================================//
 function lootingDetect(){
     lootCheck(player, chest);
     lootCheck(player, chest2);
@@ -494,7 +651,7 @@ function looting(lootable) {
     }
 }
 
-
+// SECTION: GameLoop ========================================//
     // run game loop 
 function gameLoop() {
     // clears all entities from screen

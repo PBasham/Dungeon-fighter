@@ -172,9 +172,13 @@ body {
     z-index: 8;
 }
 
-.fight-btns{
+.fight-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 25px;
     margin-left: 25px;
+    padding: auto;
     width: 150px;
     height: 75px;
     color: white;
@@ -184,7 +188,7 @@ body {
     background-color: rgb(23, 120, 152);
     z-index: 8;
 }
-.fight-btns:hover{
+.fight-btn:hover{
     border: 8px solid rgb(8, 44, 152);
 }
 
