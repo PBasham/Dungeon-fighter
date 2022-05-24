@@ -457,29 +457,28 @@ let enemyDefence = 0;
     } else {
         // if below 50%, its a 50/50 chancee
         console.log("They are nervous");
-        // if (randomTo100() > 50) {
-        //     // defend
-        //     console.log("Enemy is defending!");
-        //     enemyDefence = 3;
-        //     // show that the enemy is going to block this turn.
-        //     // show number within symbol?
-        // } else {
-        //     // attack
-        //     console.log("Enemy is attacking!");
-        //     // get enemy attack from range
-        //     console.log("calculating enemy attack.")
-        //     enemyAttack = (enemy.attack[Math.floor(Math.random() * 2)]);
-        //     console.log(enemyAttack)
-        //     // check to see if enemy will get a critical
-        //     if( randomTo100() > 85) {
-        //         console.log("It's a critical!");
-        //         enemyAttack *= 1.5;
-        //         console.log(enemyAttack);
-        //     }
-        // }
-        console.log("Enemy is defending!");
-        enemyDefence = 3;
-        return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
+        if (randomTo100() > 65) {
+            // defend
+            console.log("Enemy is defending!");
+            enemyDefence = 3;
+            // show that the enemy is going to block this turn.
+            // show number within symbol?
+            return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
+        } else {
+            // attack
+            console.log("Enemy is attacking!");
+            // get enemy attack from range
+            console.log("calculating enemy attack.")
+            enemyAttack = (enemy.attack[Math.floor(Math.random() * 2)]);
+            console.log(enemyAttack)
+            // check to see if enemy will get a critical
+            if( randomTo100() > 85) {
+                console.log("It's a critical!");
+                enemyAttack *= 1.5;
+                console.log(enemyAttack);
+            }
+            return objEnemyIntent = {"Intent": "attacking", "for": enemyAttack};
+        }
     }
 }
 
@@ -539,29 +538,37 @@ function battleScreenTransition() {
 function combatTurn(enemy, playerIntent, enemyIntent) {
     let netDamage = 0;
     if (playerIntent.Intent === "attacking") {
+
         if (enemyIntent.Intent === "attacking"){
             // both attacking, run players hit
-            console.log(`${enemy.name} is at ${enemy.health}hp`);
             enemy.health -= playerIntent.for;
             console.log(`You strike your enemy for ${playerIntent.for} damage!`);
-            // then check if enemy is killed
             console.log(`${enemy.name} is at ${enemy.health}hp`);
+            // then check if enemy is killed
+            if (enemy.health <= 0) {
+                return true;
+            }
             // if not, run enemy hit
         } else {
+
             // enemy is defending,
-            // do enemy.health -= playerIntent.for - enemyIntent.for;
             netDamage = playerIntent.for - enemyIntent.for;
             if (netDamage > 0) {
 
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
-                enemy.health -= playerIntent.for;
-                console.log(`You strike your enemy for ${playerIntent.for} damage!`);
+                enemy.health -= netDamage;
+                console.log(`You strike your enemy for ${netDamage} damage!`);
                 // then check if enemy is killed
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
             } else {
                 console.log(`${enemy.name} blocked your attack!`)
             }
+
+
             // if enemy is dead, end combat, else, allow player to go again
+            if (enemy.health <= 0) {
+                return true;
+            }
         }
     } else {
         // player is defending
@@ -603,8 +610,9 @@ function fight(player, enemy){
     
     console.log("Battle is happeing!")
     
-    let playerHealth = player.health;
-    let enemyMaxHealth = enemy.health;
+    let battleOver = false;
+    // let playerHealth = player.health;
+    // let enemyMaxHealth = enemy.health;
     
     
     function handleClickAttack(){
@@ -614,8 +622,11 @@ function fight(player, enemy){
             attack_btn.addEventListener("click", handleClickAttack);
         }, 2000);
 
-        combatTurn(enemy, playerTurn(player, "attacking"), enemyTurn(enemy));
-    
+        let result = (combatTurn(enemy, playerTurn(player, "attacking"), enemyTurn(enemy)));
+        if (result === true){
+            console.log("battle is over!");
+            battleOver = true;
+        }
     }
     function handleClickDefend(){
         attack_btn.removeEventListener("click", handleClickAttack);
@@ -623,30 +634,28 @@ function fight(player, enemy){
         setTimeout(function() {
             defend_btn.addEventListener("click", handleClickDefend);
         }, 2000);
-                combatTurn(enemy, playerTurn(player, "defending"), enemyTurn(enemy));
-            
+        let result = (combatTurn(enemy, playerTurn(player, "defending"), enemyTurn(enemy)));
+        if (result === true){
+            console.log("battle is over!");
+            battleOver = true;
+        }
     }
     
-    
-    
-
-
-    // if (player looses all health) {
-    //     they die, lose screen.
-    // } else {
-    let battleOver = false;
-    if (battleOver === true) {
-        //     once battle is over reset variables
-            console.log("Player gets loot");
-            player.inFight = false
-            player.moveState = true;
-            battleTransition = false
-            attack_btn.removeEventListener("onclick", playerTurn);
-            defend_btn.removeEventListener("onclick", playerTurn);
-    }
-
 }
-/****** FIGHT ******/
+/****** FIGHT END ******/
+
+function resultCheck(result){
+    // if player won {
+        //     once battle is over reset variables
+    //     console.log("Player gets loot");
+    //     player.inFight = false
+    //     player.moveState = true;
+    //     battleTransition = false
+    //     screen_fight.style.left = "1216px";
+    //     attack_btn.removeEventListener("click", handleClickAttack);
+    //     defend_btn.removeEventListener("click", handleClickDefend);
+    // }
+}
 
 function randomTo100(){
     return (Math.floor(Math.random() * 100) + 1);
