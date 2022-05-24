@@ -405,6 +405,9 @@ function engageEnemiesCheck() {
 
 
 function engageEnemyCheck(player, enemy) {
+    if (enemy.alive === false) {
+        return;
+    }
     let hitTest =
     player.y + player.height > enemy.y &&
     player.y < enemy.y + enemy.height &&
@@ -417,6 +420,9 @@ function engageEnemyCheck(player, enemy) {
     if (hitTest) {
         console.log(`Engage Fight!\nThis enemy has ${enemy.selectedWep} equiped.\nInventory:${enemy.inventory}`);
         // TODO: this should then change screen to fight screen and change player movementState to false.
+        if (enemy.alive === false){
+            return;
+        }
         player.moveState = false;
         player.inFight = true;
         fight(player,enemy);
@@ -456,7 +462,7 @@ let enemyDefence = 0;
         }
     } else {
         // if below 50%, its a 50/50 chancee
-        console.log("They are nervous");
+        console.log(`${enemy.name} is nervous.`);
         if (randomTo100() > 65) {
             // defend
             console.log("Enemy is defending!");
@@ -485,9 +491,9 @@ let enemyDefence = 0;
 
 
 function playerTurn(player, playerIntent) {
-    if (player.inFight === false) {
-        return;
-    }
+    // if (player.inFight === false) {
+    //     return;
+    // }
     // lock time for a few seconds? TODO:
     let objPlayerIntent = {"Intent": playerIntent, "for": 0};
     let playerAttack;
@@ -499,8 +505,6 @@ function playerTurn(player, playerIntent) {
         if ((Math.floor(Math.random() * 100) > 85)){
             playerAttack *= 1.5;
         }
-
-
         objPlayerIntent.for = playerAttack;
     } else {
         // player is defending
@@ -546,7 +550,12 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             console.log(`${enemy.name} is at ${enemy.health}hp`);
             // then check if enemy is killed
             if (enemy.health <= 0) {
-                return true;
+                return {"battleOver":true,"outcome":"playerWin"};
+            }else {
+                return {
+                    "battleOver": false,
+                    "outcome": ""
+                };
             }
             // if not, run enemy hit
         } else {
@@ -567,13 +576,22 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
 
             // if enemy is dead, end combat, else, allow player to go again
             if (enemy.health <= 0) {
-                return true;
+                return {
+                    "battleOver": true,
+                    "outcome": "playerWin"
+                };
+            } else {
+                return {
+                    "battleOver": false,
+                    "outcome": ""
+                };
             }
         }
     } else {
         // player is defending
         if (enemyIntent === "defending") {
             // both players blocking????
+            console.log("You both blocked!");
         } else {
             // player.health -= enemyIntent.for
         }
@@ -581,26 +599,13 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
 
 
 }
-// transition screen on √
-// get enemy intent and show it
-
-// once button is clicked do action player picked, 
-    // if enemy died, end combat, reward player.
-    // else allow enemy turn with intent in response
-    // check if player is dead.
-        // if player === dead, lose
-
-        // else get enemy intent then
-        // wait for button click again
-
-
 
         
         
 /****** FIGHT ******/
 function fight(player, enemy){
     // allow player to use buttons
-    
+    console.log("accessing fight!");
     attack_btn.addEventListener("click", handleClickAttack);
     
     defend_btn.addEventListener("click", handleClickDefend);
@@ -610,7 +615,6 @@ function fight(player, enemy){
     
     console.log("Battle is happeing!")
     
-    let battleOver = false;
     // let playerHealth = player.health;
     // let enemyMaxHealth = enemy.health;
     
@@ -618,14 +622,18 @@ function fight(player, enemy){
     function handleClickAttack(){
         attack_btn.removeEventListener("click", handleClickAttack);
         defend_btn.removeEventListener("click", handleClickDefend);
-        setTimeout(function() {
-            attack_btn.addEventListener("click", handleClickAttack);
-        }, 2000);
+
 
         let result = (combatTurn(enemy, playerTurn(player, "attacking"), enemyTurn(enemy)));
-        if (result === true){
+
+        
+        if (result.battleOver === true){
             console.log("battle is over!");
-            battleOver = true;
+            resultCheck(result.outcome);
+        } else {
+            setTimeout(function() {
+                attack_btn.addEventListener("click", handleClickAttack);
+            }, 1000);
         }
     }
     function handleClickDefend(){
@@ -635,27 +643,33 @@ function fight(player, enemy){
             defend_btn.addEventListener("click", handleClickDefend);
         }, 2000);
         let result = (combatTurn(enemy, playerTurn(player, "defending"), enemyTurn(enemy)));
-        if (result === true){
+        if (result.battleOver === true){
             console.log("battle is over!");
-            battleOver = true;
+            resultCheck(result.outcome);
         }
     }
     
+    function resultCheck(result){
+        // if player won {
+            if (result === "playerWin"){
+                enemy.alive = false;
+                console.log(enemy);
+                console.log("Player gets loot");
+                player.inFight = false
+                player.moveState = true;
+                battleTransition = false
+                screen_fight.style.left = "1216px";
+
+                attack_btn.removeEventListener("click", handleClickAttack);
+                defend_btn.removeEventListener("click", handleClickDefend);
+            } else {
+                // the player died! pull up lose screen and maybe reset button?
+                console.log("Oh, you lost!");
+            }
+    }
 }
 /****** FIGHT END ******/
 
-function resultCheck(result){
-    // if player won {
-        //     once battle is over reset variables
-    //     console.log("Player gets loot");
-    //     player.inFight = false
-    //     player.moveState = true;
-    //     battleTransition = false
-    //     screen_fight.style.left = "1216px";
-    //     attack_btn.removeEventListener("click", handleClickAttack);
-    //     defend_btn.removeEventListener("click", handleClickDefend);
-    // }
-}
 
 function randomTo100(){
     return (Math.floor(Math.random() * 100) + 1);
