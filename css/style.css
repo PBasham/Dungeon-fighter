@@ -26,6 +26,7 @@ body {
     height: 908px;
     width: 1216px;
     font-family: 'VT323', monospace;
+    overflow: hidden
 }
 
 #screen-start {
@@ -74,11 +75,11 @@ body {
     display: ;
     position: absolute;
     top: 0; 
-    right: 0;
+    left: 1216px;
     height: 908px;
-    width: 0; 
+    width: 1216px; 
     background: url(/GA-Proj1-Dungeon-fighter/imgs/screen/fightscreen.png);
-    background-position:center ;
+    background-position:center;
     background-repeat: no-repeat;
     background-size: contain;
     background-color: grey;
@@ -160,6 +161,7 @@ body {
     z-index: 8;
 }
 #fight-btns {
+    display: flex;
     position: absolute;
     bottom: 12.5px;
     left: 12.5px;
@@ -170,9 +172,20 @@ body {
     z-index: 8;
 }
 
-.fightbutton {
-    width: 50px;
-    height: 100px;
+.fight-btns{
+    margin-top: 25px;
+    margin-left: 25px;
+    width: 150px;
+    height: 75px;
+    color: white;
+    font-family: 'VT323', monospace;
+    font-size: 48px;
+    border: 4px solid rgb(255, 255, 255);
+    background-color: rgb(23, 120, 152);
+    z-index: 8;
+}
+.fight-btns:hover{
+    border: 8px solid rgb(8, 44, 152);
 }
 
 

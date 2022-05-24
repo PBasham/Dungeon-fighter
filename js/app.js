@@ -4,6 +4,7 @@ let ctx = game.getContext("2d"); // NOTE: creates two dimensional canvas.
 
 let start_btn = document.getElementById("startGame-btn");
 let screen_start = document.getElementById("screen-start");
+let screen_fight = document.getElementById("screen-fight");
 // let screen_win = document.getElementById("");
 // let screen_lose = document.getElementById("");
 let game_info = document.getElementById("game-info");
@@ -409,17 +410,44 @@ function engageEnemyCheck(player, enemy) {
     if (hitTest) {
         console.log(`Engage Fight!\nThis enemy has ${enemy.selectedWep} equiped.\nInventory:${enemy.inventory}`);
         player.inFight = true;
-        player.moveState = false;
         // TODO: this should then change screen to fight screen and change player movementState to false.
+        player.moveState = false;
         
+        fight(player,enemy);
     }
 }
 function fight(player, enemy){
+    console.log(screen_fight.style.left);
+    let counter = 1;
+    let leftAmount = 1216;
+    // transition fightscreen onto game
+    // TODO: make the work FIGHT pop up, fasing in and out. Enlarging and decressing in size as well. LEFTOFF:
+    setInterval(function() {
+        if (counter >= 6) {
+            clearInterval(fight);
+        } else {
+            leftAmount -= 243.2;
+            screen_fight.style.left = leftAmount + "px";
+            console.log(screen_fight.style.left);
+            console.log(counter++);
+        }
+    }, 50);
+    
+    setTimeout( function() {
+        // change player.movementState = true;
+    }, 1000);
+    player.moveState = true;
+    // hide startscreen and buttons
+    screen_start.style.display = "none";
+    game_info.style.opacity = 1;
+    game_inventory.style.opacity = 1;
+    fight_area.style.opacity = 1;
+    
     // show fight buttons
     // set any variables needed, 
     let battleEnd = false;
     // loop until someone dies
-    while(battleEnd){
+    while(!battleEnd){
 
 
 
