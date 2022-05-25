@@ -6,7 +6,7 @@ let start_btn = document.getElementById("startGame-btn");
 let screen_start = document.getElementById("screen-start");
 let screen_fight = document.getElementById("screen-fight");
 // let screen_win = document.getElementById("");
-// let screen_lose = document.getElementById("");
+let screen_lose = document.getElementById("screen-lose");
 let game_info = document.getElementById("game-info");
 let game_inventory = document.getElementById("game-inventory");
 let fight_area = document.getElementById("fight-btns");
@@ -704,6 +704,7 @@ function fight(player, enemy){
                 console.log("Oh, you lost!");
                 gameOver = true;
                 // pull over lost screen!
+                screen_lose.style.zIndex = 10;
             }
             screen_fight.style.left = "1216px";
             attack_btn.removeEventListener("click", handleClickAttack);
