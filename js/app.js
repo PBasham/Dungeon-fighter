@@ -30,6 +30,7 @@ let winner = false;
 let gameOver = false;
 let prisonerCount = 1;
 let prisonersSaved = 0;
+let baseCritChance = 5;
 // === *** DECLARE BOUNDRIES *** === //
 // check to see where the player is, adjust the boundries accordingly.
 let bdrMain1;
@@ -63,7 +64,7 @@ game.setAttribute("height", "908");
 game.setAttribute("width", "1216");
 
 class Entity {
-    constructor(name, imgSrc, x, y, color, width, height, maxHealth, health, attack, selectedWep, inventory) {
+    constructor(name, imgSrc, x, y, color, width, height, maxHealth, health, attack, defence,selectedWep, selectedDefence, inventory) {
         this.name = name;
         this.x = x * 32;
         this.y = (y * 32) + 150;
@@ -73,6 +74,7 @@ class Entity {
         this.maxHealth = maxHealth;
         this.health = health;
         this.attack = attack;
+        this.defence = defence;
         this.selectedWep = inventory[0];
         this.inventory = inventory;
         this.Keys = 1;
@@ -202,13 +204,13 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 10, [1,3], "basic-sword",["basic-sword"]);
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStand.png",3, 5, "blue", 1, 1, 10, 10, [1,3], 3, "basic-sword", "basic-shield", ["basic-sword", "basic-shield"]);
     // create enemies
-    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], "mace", ["mace", "leather tunic"]);
-    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], "better-mace", ["better-mace", "leather pants"]);
+    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, "mace", "none", ["mace", "leather tunic"]);
+    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2, "better-mace","none", ["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
-    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
+    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
 
     prisoner1 = new Prisoner("Steve","./imgs/prisoner/prisoner.png",{x:30,y: 16}, {w:1,h: 1})    // set boundries to walls
     setBoundaries()
@@ -325,6 +327,8 @@ function setBoundaries() {
     bdrRm2Rt = new Boundry("Rm2Rt", 34, 11, 1, 5);
     bdrRm2Wtr1 = new Boundry("Rm2Wtr1", 27, 11, 4, 2);
     bdrRm2Wtr2 = new Boundry("Rm2Wtr2", 32, 11, 2, 2);
+    bdrTunSpk1 = new Boundry("TunSpk1", 15, 14, 2, 1);
+    bdrTunSpk2 = new Boundry("TunSpk2", 18, 15, 1, 1);
     // bdr = new Boundry("", , , , );
     
 }
@@ -358,6 +362,8 @@ function renderBoundries() {
     bdrRm2Rt.render();
     bdrRm2Wtr1.render();
     bdrRm2Wtr2.render();
+    bdrTunSpk1.render();
+    bdrTunSpk2.render();  
 }
 
 function checkBoundryCollison(direction) {
@@ -389,7 +395,10 @@ function checkBoundryCollison(direction) {
     checkBoundries(player, bdrRm2BtRt2, direction) ||
     checkBoundries(player, bdrRm2Rt, direction) ||
     checkBoundries(player, bdrRm2Wtr1, direction) ||
-    checkBoundries(player, bdrRm2Wtr2, direction)
+    checkBoundries(player, bdrRm2Wtr1, direction) ||
+    checkBoundries(player, bdrRm2Wtr2, direction) ||
+    checkBoundries(player, bdrTunSpk1, direction) ||
+    checkBoundries(player, bdrTunSpk2, direction)
     // checkBoundries(player, bdr, direction)
     ) {
         return true;
@@ -522,8 +531,8 @@ let enemyDefence = 0;
         // chose random number from 1 - 10, if  it's greater then 2.5 defend, else attack.
         if (randomTo100() >= 75) {
             // defend
-            console.log("Enemy is defending!");
-            enemyDefence = 3;
+            enemyDefence = enemy.defence;
+            console.log(`Enemy is defending for ${enemy.defence}!`);
             // show that the enemy is going to block this turn.
             // show number within symbol?
             return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
@@ -532,9 +541,9 @@ let enemyDefence = 0;
             console.log("Enemy is attacking!");
             // get enemy attack from range
             console.log("calculating enemy attack.")
-            enemyAttack = Math.floor(Math.random() * enemy.attack[1]) + enemy.attack[0];
+            enemyAttack = Math.floor(Math.random() * (enemy.attack[1] - enemy.attack[0] + 1)) + enemy.attack[0];
             // check to see if enemy will get a critical
-            if( randomTo100() > 85) {
+            if( randomTo100() <= baseCritChance) {
                 console.log("It's a critical!");
                 enemyAttack *= 1.5;
             }
@@ -546,8 +555,8 @@ let enemyDefence = 0;
         console.log(`${enemy.name} is nervous.`);
         if (randomTo100() > 65) {
             // defend
-            console.log("Enemy is defending!");
-            enemyDefence = 3;
+            enemyDefence = enemy.defence;
+            console.log(`Enemy is defending for ${enemy.defence}!`);
             // show that the enemy is going to block this turn.
             // show number within symbol?
             return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
@@ -556,10 +565,10 @@ let enemyDefence = 0;
             console.log("Enemy is attacking!");
             // get enemy attack from range
             console.log("calculating enemy attack.")
-            enemyAttack = (enemy.attack[Math.floor(Math.random() * 2)]);
+            enemyAttack = Math.floor(Math.random() * (enemy.attack[1] - enemy.attack[0] + 1)) + enemy.attack[0];
             console.log(enemyAttack)
             // check to see if enemy will get a critical
-            if( randomTo100() > 85) {
+            if( randomTo100() <= baseCritChance) {
                 console.log("It's a critical!");
                 enemyAttack *= 1.5;
                 console.log(enemyAttack);
@@ -581,15 +590,15 @@ function playerTurn(player, playerIntent) {
     let playerDefence = 0;
     if (playerIntent === "attacking") {
         // player is attacking BUG: get min and max of array and get number between then.
-        playerAttack = Math.floor(Math.random() * player.attack[1]) + player.attack[0];
+        playerAttack = Math.floor(Math.random() * (player.attack[1] - player.attack[0] + 1)) + player.attack[0];
         // check if player gets critical
-        if ((Math.floor(Math.random() * 100) > 85)){
+        if (randomTo100() <= baseCritChance){
             playerAttack *= 1.5;
         }
         objPlayerIntent.for = playerAttack;
     } else {
         // player is defending
-        playerDefence = 3;
+        playerDefence = player.defence;
         objPlayerIntent.for = playerDefence;
     }
 
@@ -734,6 +743,8 @@ function fight(player, enemy){
         fight_buttons.item(i).classList.remove("inactive-btn");
     }
 
+    fight_enemy_health.style.width = (enemy.health * 20) + "px"; // BUG: didn't change enemy health on second encounter. 
+    // BUG: need to make enmy health dynamic
     
     // transition to fight screen if it has not already started.
     battleScreenTransition();
