@@ -5,7 +5,7 @@ let ctx = game.getContext("2d"); // NOTE: creates two dimensional canvas.
 let start_btn = document.getElementById("startGame-btn");
 let screen_start = document.getElementById("screen-start");
 let screen_fight = document.getElementById("screen-fight");
-// let screen_win = document.getElementById("");
+let screen_win = document.getElementById("screen-win");
 let screen_lose = document.getElementById("screen-lose");
 let game_info = document.getElementById("game-info");
 let game_inventory = document.getElementById("game-inventory");
@@ -28,7 +28,8 @@ let moveAmount = 32;
 let battleTransition = false;
 let winner = false;
 let gameOver = false;
-
+let prisonerCount = 1;
+let prisonersSaved = 0;
 // === *** DECLARE BOUNDRIES *** === //
 // check to see where the player is, adjust the boundries accordingly.
 let bdrMain1;
@@ -446,6 +447,33 @@ function checkBoundries(player, boundry, direction){
         }
     }
 }
+// SECTION-END:
+
+// SECTION: Prisoner Save ========================================//
+function detectSavePrisoner(player, prisoner) {
+    // created a seperate funciton incase I want to ake multiple prisoners later.
+    let hitTest =
+    player.y + player.height > prisoner.y &&
+    player.y < prisoner.y + prisoner.height &&
+    player.x + player.width > prisoner.x &&
+    player.x < prisoner.x + prisoner.width;
+    if (hitTest) {
+        // prisoner is saved!
+        prisoner.isSaved = true;
+        prisonerSaved();
+    }
+}
+function prisonerSaved() {
+    prisonersSaved++
+    if (prisonerCount >= prisonersSaved){
+        moveState = false;
+        // pull up win screen!
+        gameOver = true;
+        screen_win.style.zIndex = 6;
+    }
+
+}
+// SECTION-END:
 
 // SECTION: Enemy Engagment ========================================//
 function engageEnemiesCheck() {
@@ -839,6 +867,7 @@ function gameLoop() {
     if (player.inFight === false) {
         engageEnemiesCheck();
         lootingDetect();
+        detectSavePrisoner(player, prisoner1)
     }
     
     // adds all entities back if they are alive.
