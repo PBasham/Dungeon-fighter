@@ -647,14 +647,14 @@ function fight(player, enemy){
     
     // let playerHealth = player.health;
     // let enemyMaxHealth = enemy.health;
-    
+    let enemyMove = enemyTurn(enemy);
     
     function handleClickAttack(){
         attack_btn.removeEventListener("click", handleClickAttack);
         defend_btn.removeEventListener("click", handleClickDefend);
 
 
-        let result = (combatTurn(enemy, playerTurn(player, "attacking"), enemyTurn(enemy)));
+        let result = (combatTurn(enemy, playerTurn(player, "attacking"), enemyMove));
 
         
         if (result.battleOver === true){
@@ -664,20 +664,28 @@ function fight(player, enemy){
             setTimeout(function() {
                 attack_btn.addEventListener("click", handleClickAttack);
                 defend_btn.addEventListener("click", handleClickDefend);
+                enemyMove = enemyTurn(enemy)
             }, 1000);
         }
     }
+
     function handleClickDefend(){
         attack_btn.removeEventListener("click", handleClickAttack);
         defend_btn.removeEventListener("click", handleClickDefend);
-        setTimeout(function() {
-            attack_btn.addEventListener("click", handleClickAttack);
-            defend_btn.addEventListener("click", handleClickDefend);
-        }, 2000);
-        let result = (combatTurn(enemy, playerTurn(player, "defending"), enemyTurn(enemy)));
+
+
+        let result = (combatTurn(enemy, playerTurn(player, "defending"), enemyMove));
+
+        
         if (result.battleOver === true){
             console.log("battle is over!");
             resultCheck(result.outcome);
+        } else {
+            setTimeout(function() {
+                attack_btn.addEventListener("click", handleClickAttack);
+                defend_btn.addEventListener("click", handleClickDefend);
+                enemyMove = enemyTurn(enemy)
+            }, 1000);
         }
     }
     
