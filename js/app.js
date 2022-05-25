@@ -115,7 +115,7 @@ class Lootable {
         this.LotSprite.src = imgSrc;
     }
     
-    render() {
+    render(looted) {
         ctx.save();
         if (this.rotate > 0){
             ctx.translate(this.x + this.width, this.y);
@@ -124,8 +124,35 @@ class Lootable {
         }
         // ctx.fillStyle = this.color;
         // ctx.fillRect(this.x, this.y, this.width, this.height);
-        ctx.drawImage(this.LotSprite, this.x, this.y);
+        if (this.looted === true) {
+            ctx.drawImage(
+                this.LotSprite, 
+                this.LotSprite.width / 2,
+                0,
+                this.LotSprite.width / 2,
+                this.LotSprite.height,
+                this.x,
+                this.y,
+                this.LotSprite.width / 2,
+                this.LotSprite.height
+                );
+        } else {
+            ctx.drawImage(
+                this.LotSprite, 
+                0,
+                0,
+                this.LotSprite.width / 2,
+                this.LotSprite.height,
+                this.x,
+                this.y,
+                this.LotSprite.width / 2,
+                this.LotSprite.height
+                );
+        }
         ctx.restore();
+    }
+    loot() {
+        this.LotSprite.looted = true;
     }
 }
 
@@ -158,8 +185,8 @@ window.addEventListener("DOMContentLoaded", function(e) {
     orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], "mace", ["mace", "leather tunic"]);
     orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], "better-mace", ["better-mace", "leather pants"]);
     // create lootables
-    chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest_Closed.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
-    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest_Closed.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
+    chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
+    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
     // set boundries to walls
     setBoundaries()
 
@@ -648,9 +675,15 @@ function fight(player, enemy){
     fight_enemy_name.textContent = enemy.name; 
     // allow player to use buttons
     console.log("accessing fight!");
+
     attack_btn.addEventListener("click", handleClickAttack);
-    
+
     defend_btn.addEventListener("click", handleClickDefend);
+    for (let i = 0; i < fight_buttons.length; i++) {
+        fight_buttons.item(i).classList.add("active-btn");
+        fight_buttons.item(i).classList.remove("inactive-btn");
+    }
+
     
     // transition to fight screen if it has not already started.
     battleScreenTransition();
@@ -699,6 +732,8 @@ function fight(player, enemy){
         }
     }
     
+
+    // check the outcome of the fight.
     function resultCheck(result){
         // if player won {
             if (result === "playerWin"){
@@ -717,6 +752,10 @@ function fight(player, enemy){
                 screen_lose.style.zIndex = 6;
             }
             screen_fight.style.left = "1216px";
+            for (let i = 0; i < fight_buttons.length; i++) {
+                fight_buttons.item(i).classList.remove("active-btn");
+                fight_buttons.item(i).classList.add("inactive-btn");
+            }
             attack_btn.removeEventListener("click", handleClickAttack);
             defend_btn.removeEventListener("click", handleClickDefend);
     }
@@ -748,15 +787,18 @@ function lootCheck(player, lootable) {
 }
 
 function looting(lootable) {
+
     if (lootable.looted) {
-        return console.log("Chest already looted");
+        return;
     }
     if (!lootable.locked){
         lootable.looted = true;
+        // lootable.loot();
         return console.log(`You loot the chest and get ${lootable.contains}`);
     } else if (player.Keys > 0){
         player.Keys--;
         lootable.looted = true;
+        // lootable.loot();
         return console.log(`You unlocked the chest!\nThis chest contains ${lootable.contains}\nYou have ${player.Keys} keys remainng.`);
     } else {
         return console.log("You need a key to open this chest!");
