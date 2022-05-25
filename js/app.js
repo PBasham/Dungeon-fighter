@@ -152,7 +152,7 @@ window.addEventListener("DOMContentLoaded", function(e) {
     player = new Entity("Hero", "./imgs/The_Hero/HeroStanding.png",3, 5, "blue", 1, 1, 10, 10, [1,3], "basic-sword",["basic-sword"]);
     // create enemies
     orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], "mace", ["mace", "leather tunic"]);
-    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,5], "better-mace", ["better-mace", "leather pants"]);
+    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], "better-mace", ["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest_Closed.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest_Closed.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
@@ -451,7 +451,7 @@ let enemyDefence = 0;
             console.log("Enemy is attacking!");
             // get enemy attack from range
             console.log("calculating enemy attack.")
-            enemyAttack = (enemy.attack[Math.floor(Math.random() * 2)]);
+            enemyAttack = Math.floor(Math.random() * enemy.attack[1]) + enemy.attack[0];
             // check to see if enemy will get a critical
             if( randomTo100() > 85) {
                 console.log("It's a critical!");
@@ -500,7 +500,7 @@ function playerTurn(player, playerIntent) {
     let playerDefence = 0;
     if (playerIntent === "attacking") {
         // player is attacking BUG: get min and max of array and get number between then.
-        playerAttack = player.attack[Math.floor(Math.random() * 2)];
+        playerAttack = Math.floor(Math.random() * player.attack[1]) + player.attack[0];
         // check if player gets critical
         if ((Math.floor(Math.random() * 100) > 85)){
             playerAttack *= 1.5;
