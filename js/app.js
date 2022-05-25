@@ -156,6 +156,27 @@ class Lootable {
     }
 }
 
+class Prisoner {
+    constructor(name, imgSrc, position, size ) {
+        this.name = name;
+        this.imgSrc = imgSrc;
+        this.EntSprite = new Image(); 
+        this.EntSprite.src = imgSrc;
+        this.x = position.x * 32;
+        this.y = (position.y * 32) + 150;
+        this.width = size.w * 32;
+        this.height = size.h * 32;
+        this.isAlive = true;
+        this.isSaved = false;
+    }
+
+    render() {
+        ctx.drawImage(this.EntSprite, this.x, this.y);
+    }
+
+
+}
+
 class Boundry {
     constructor(name, x, y, width, height) {
         this.name = name
@@ -187,7 +208,8 @@ window.addEventListener("DOMContentLoaded", function(e) {
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/SilverChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
-    // set boundries to walls
+
+    prisoner1 = new Prisoner("Steve","./imgs/prisoner/prisoner.png",{x:30,y: 16}, {w:1,h: 1})    // set boundries to walls
     setBoundaries()
 
     const runGame = setInterval(gameLoop, 120);
@@ -824,6 +846,7 @@ function gameLoop() {
     orc2.alive === true ? orc2.render() : null;
     chest.visible === true ? chest.render() : null;
     chest2.visible === true ? chest2.render() : null;
+    prisoner1.isAlive === true ? prisoner1.render() : null;
     
     // NOTE: Render player last so they appear ontop of other elements.
     player.alive === true ? player.render() : null;
