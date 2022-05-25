@@ -551,13 +551,25 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             // then check if enemy is killed
             if (enemy.health <= 0) {
                 return {"battleOver":true,"outcome":"playerWin"};
-            }else {
+            }
+            // run enemy hit
+            player.health -= enemyIntent.for;
+            console.log(`${enemy.name} strikes you for ${enemyIntent.for} damage!`);
+            console.log(`${player.name} is at ${player.health}hp`);
+
+            // check if player died
+            if (player.health <= 0) {
                 return {
-                    "battleOver": false,
-                    "outcome": ""
+                    "battleOver": true,
+                    "outcome": "playerLost"
                 };
             }
-            // if not, run enemy hit
+
+            // if no one is dead, run this.
+            return {
+                "battleOver": false,
+                "outcome": ""
+            };
         } else {
 
             // enemy is defending,
@@ -573,7 +585,6 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
                 console.log(`${enemy.name} blocked your attack!`)
             }
 
-
             // if enemy is dead, end combat, else, allow player to go again
             if (enemy.health <= 0) {
                 return {
@@ -587,6 +598,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
                 };
             }
         }
+
     } else {
         // player is defending
         if (enemyIntent === "defending") {
@@ -658,14 +670,16 @@ function fight(player, enemy){
                 player.inFight = false
                 player.moveState = true;
                 battleTransition = false
-                screen_fight.style.left = "1216px";
-
-                attack_btn.removeEventListener("click", handleClickAttack);
-                defend_btn.removeEventListener("click", handleClickDefend);
+                
             } else {
                 // the player died! pull up lose screen and maybe reset button?
                 console.log("Oh, you lost!");
+                gameOver = true;
+                // pull over lost screen!
             }
+            screen_fight.style.left = "1216px";
+            attack_btn.removeEventListener("click", handleClickAttack);
+            defend_btn.removeEventListener("click", handleClickDefend);
     }
 }
 /****** FIGHT END ******/
