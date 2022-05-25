@@ -598,14 +598,32 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
                 };
             }
         }
-
+        
     } else {
         // player is defending
         if (enemyIntent === "defending") {
             // both players blocking????
             console.log("You both blocked!");
         } else {
-            // player.health -= enemyIntent.for
+            netDamage = enemyIntent.for - playerIntent.for;
+            if (netDamage > 0) {
+                // you take damage
+                player.health -= netDamage;
+                console.log(`${player.name} blocked but still took ${netDamage} damage!`);
+            } else {
+                console.log(`${player.name} blocked ${enemy.name}'s attack!`);
+            }
+            if (player.health <= 0) {
+                return {
+                    "battleOver": true,
+                    "outcome": "playerLose"
+                };
+            } else {
+                return {
+                    "battleOver": false,
+                    "outcome": ""
+                };
+            }
         }
     }
 
@@ -645,6 +663,7 @@ function fight(player, enemy){
         } else {
             setTimeout(function() {
                 attack_btn.addEventListener("click", handleClickAttack);
+                defend_btn.addEventListener("click", handleClickDefend);
             }, 1000);
         }
     }
@@ -652,6 +671,7 @@ function fight(player, enemy){
         attack_btn.removeEventListener("click", handleClickAttack);
         defend_btn.removeEventListener("click", handleClickDefend);
         setTimeout(function() {
+            attack_btn.addEventListener("click", handleClickAttack);
             defend_btn.addEventListener("click", handleClickDefend);
         }, 2000);
         let result = (combatTurn(enemy, playerTurn(player, "defending"), enemyTurn(enemy)));
