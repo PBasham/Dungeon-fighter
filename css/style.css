@@ -88,6 +88,7 @@ body {
     position: absolute;
     top: 0; 
     left: 1216px;
+    /* left: 0; TEMP: */
     height: 908px;
     width: 1216px; 
     background: url(/GA-Proj1-Dungeon-fighter/imgs/screen/fightscreen.png);
@@ -143,6 +144,8 @@ body {
     font-size: 28px;
 }
 
+
+/* ======== Player - Enemy Health-bars ======== */
 #health-outline,
 #health-fill {
     position: absolute;
@@ -161,6 +164,36 @@ body {
     width: ;
     background-color: red;
 }
+
+#enemy-info {
+    position: absolute;
+    top: 700px;
+    right: 600px;
+}
+#fight-enemyName {
+    position: absolute;
+    top: 0; 
+    left: 0;
+    color: white;
+}
+#fight-enemyHealth-outline,
+#fight-enemyHealth-fill {
+    position: absolute;
+    top: 2px;
+    Left: 110px;
+    height: 15px;
+    width: 200px;
+}
+#fight-enemyHealth-outline {
+    border: 2px solid white;
+    background-color: black;
+}
+#fight-enemyHealth-fill {
+    top: 4px;
+    left: 112px;
+    background-color: red;
+}
+
 
 #game-inventory {
     position: absolute;

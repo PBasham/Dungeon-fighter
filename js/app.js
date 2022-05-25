@@ -14,6 +14,10 @@ let fight_buttons = document.getElementsByClassName("fight-btn");
 let attack_btn = document.getElementById("attack-btn");
 let defend_btn = document.getElementById("defend-btn");
 let playerHealth = document.getElementById("health-fill");
+let fight_enemy_name = document.getElementById("fight-enemyName");
+let fight_enemy_health = document.getElementById("fight-enemyHealth-fill");
+
+
 let player;
 let playerSprite = ""
 let orc;
@@ -546,6 +550,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
         if (enemyIntent.Intent === "attacking"){
             // both attacking, run players hit
             enemy.health -= playerIntent.for;
+            fight_enemy_health.style.width = (enemy.health * 20) + "px";
             console.log(`You strike your enemy for ${playerIntent.for} damage!`);
             console.log(`${enemy.name} is at ${enemy.health}hp`);
             // then check if enemy is killed
@@ -559,7 +564,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             playerHealth.style.width = (player.health * 20) + "px";
             console.log(`${enemy.name} strikes you for ${enemyIntent.for} damage!`);
             console.log(`${player.name} is at ${player.health}hp`);
-
+            
             // check if player died
             if (player.health <= 0) {
                 return {
@@ -581,6 +586,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
 
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
                 enemy.health -= netDamage;
+                fight_enemy_health.style.width = (enemy.health * 20) + "px";
                 console.log(`You strike your enemy for ${netDamage} damage!`);
                 // then check if enemy is killed
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
@@ -639,6 +645,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
         
 /****** FIGHT ******/
 function fight(player, enemy){
+    fight_enemy_name.textContent = enemy.name; 
     // allow player to use buttons
     console.log("accessing fight!");
     attack_btn.addEventListener("click", handleClickAttack);
