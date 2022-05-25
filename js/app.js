@@ -13,7 +13,7 @@ let fight_area = document.getElementById("fight-btns");
 let fight_buttons = document.getElementsByClassName("fight-btn");
 let attack_btn = document.getElementById("attack-btn");
 let defend_btn = document.getElementById("defend-btn");
-
+let playerHealth = document.getElementById("health-fill");
 let player;
 let playerSprite = ""
 let orc;
@@ -554,6 +554,9 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             }
             // run enemy hit
             player.health -= enemyIntent.for;
+            // change player healthbar
+            player.health < 0 ? player.health = 0 : null;
+            playerHealth.style.width = (player.health * 20) + "px";
             console.log(`${enemy.name} strikes you for ${enemyIntent.for} damage!`);
             console.log(`${player.name} is at ${player.health}hp`);
 
@@ -609,6 +612,8 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             if (netDamage > 0) {
                 // you take damage
                 player.health -= netDamage;
+                player.health < 0 ? player.health = 0 : null;
+                playerHealth.style.width = (player.health * 20) + "px";
                 console.log(`${player.name} blocked but still took ${netDamage} damage!`);
             } else {
                 console.log(`${player.name} blocked ${enemy.name}'s attack!`);
@@ -645,8 +650,6 @@ function fight(player, enemy){
     
     console.log("Battle is happeing!")
     
-    // let playerHealth = player.health;
-    // let enemyMaxHealth = enemy.health;
     let enemyMove = enemyTurn(enemy);
     
     function handleClickAttack(){
@@ -704,7 +707,7 @@ function fight(player, enemy){
                 console.log("Oh, you lost!");
                 gameOver = true;
                 // pull over lost screen!
-                screen_lose.style.zIndex = 10;
+                screen_lose.style.zIndex = 6;
             }
             screen_fight.style.left = "1216px";
             attack_btn.removeEventListener("click", handleClickAttack);
