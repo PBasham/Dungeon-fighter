@@ -227,10 +227,10 @@ function loadUp() {
 
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "./imgs/The_Hero/HeroStand.png",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, ["basic-sword", "basic-shield"]);
+    player = new Entity("Hero", "../imgs/The_Hero/HeroStand.png",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, ["basic-sword", "basic-shield"]);
     // create enemies
-    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace", "none","leather tunic"]);
-    orc2 = new Entity("Orc", "./imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace",  "none","leather tunic"]);
+    orc = new Entity("Orc", "../imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace", "none","leather tunic"]);
+    orc2 = new Entity("Orc", "../imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace",  "none","leather tunic"]);
     AngryOrc = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2,["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
