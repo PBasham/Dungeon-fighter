@@ -102,7 +102,7 @@ body {
     /* left: 0; TEMP: */
     height: 908px;
     width: 1216px; 
-    background: url(imgs/screen/fightscreen.png);
+    background: url(../imgs/screen/fightscreen.png);
     background-position:center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -128,7 +128,7 @@ body {
     position: absolute;
     top: 0;
     right: 0;
-    background: url(imgs/DF-Cave.png);
+    background: url(../imgs/DF-Cave.png);
     background-position:center ;
     background-repeat: no-repeat;
     background-size: contain;
