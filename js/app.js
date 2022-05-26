@@ -64,7 +64,7 @@ game.setAttribute("height", "908");
 game.setAttribute("width", "1216");
 
 class Entity {
-    constructor(name, imgSrc, x, y, color, width, height, maxHealth, health, attack, defence,selectedWep, selectedDefence, inventory) {
+    constructor(name, imgSrc, x, y, color, width, height, maxHealth, health, attack, defence, inventory) {
         this.name = name;
         this.x = x * 32;
         this.y = (y * 32) + 150;
@@ -76,6 +76,7 @@ class Entity {
         this.attack = attack;
         this.defence = defence;
         this.selectedWep = inventory[0];
+        this.selectedDefence = inventory[1];
         this.inventory = inventory;
         this.Keys = 1;
         this.inFight = false;
@@ -204,10 +205,11 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "./imgs/The_Hero/HeroStand.png",3, 5, "blue", 1, 1, 10, 10, [1,3], 3, "basic-sword", "basic-shield", ["basic-sword", "basic-shield"]);
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStand.png",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, ["basic-sword", "basic-shield"]);
     // create enemies
-    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, "mace", "none", ["mace", "leather tunic"]);
-    orc2 = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2, "better-mace","none", ["better-mace", "leather pants"]);
+    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace", "none","leather tunic"]);
+    orc2 = new Entity("Orc", "./imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace",  "none","leather tunic"]);
+    AngryOrc = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2,["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
@@ -329,6 +331,19 @@ function setBoundaries() {
     bdrRm2Wtr2 = new Boundry("Rm2Wtr2", 32, 11, 2, 2);
     bdrTunSpk1 = new Boundry("TunSpk1", 15, 14, 2, 1);
     bdrTunSpk2 = new Boundry("TunSpk2", 18, 15, 1, 1);
+    brdMainSpk1 = new Boundry("MainSpk1", 19, 3, 3, 1);
+    brdMainSpk2 = new Boundry("MainSpk2", 19, 4, 2, 1);
+    brdMainSpk3 = new Boundry("MainSpk3", 19, 5, 1, 1);
+    brdMainSpk4 = new Boundry("MainSpk4", 19, 7, 1,1);
+    brdMainSpk5 = new Boundry("MainSpk5", 18, 8, 1,1);
+    brdMainSpk6 = new Boundry("MainSpk6", 17, 9, 1,1);
+    brdMainSpk7 = new Boundry("MainSpk7", 19, 9, 1,1);
+    brdMainSpk8 = new Boundry("MainSpk8", 5, 8, 2,1);
+    brdMainSpk9 = new Boundry("MainSpk8", 34, 9, 1,1);
+    brdRm2Spk1 = new Boundry("MainSpk8", 27, 13, 1,1);
+    brdRm2Spk2 = new Boundry("MainSpk8", 32, 14, 1,1);
+    brdRm2Spk3 = new Boundry("MainSpk8", 27, 16, 1,1);
+    brdRm2Spk4 = new Boundry("MainSpk8", 28,17, 1,1);
     // bdr = new Boundry("", , , , );
     
 }
@@ -363,7 +378,20 @@ function renderBoundries() {
     bdrRm2Wtr1.render();
     bdrRm2Wtr2.render();
     bdrTunSpk1.render();
-    bdrTunSpk2.render();  
+    bdrTunSpk2.render();
+    brdMainSpk1.render();
+    brdMainSpk2.render();
+    brdMainSpk3.render();
+    brdMainSpk4.render();
+    brdMainSpk5.render();
+    brdMainSpk6.render();
+    brdMainSpk7.render();
+    brdMainSpk8.render();
+    brdMainSpk9.render();
+    brdRm2Spk1.render();
+    brdRm2Spk2.render();
+    brdRm2Spk3.render();
+    brdRm2Spk4.render();  
 }
 
 function checkBoundryCollison(direction) {
@@ -398,7 +426,21 @@ function checkBoundryCollison(direction) {
     checkBoundries(player, bdrRm2Wtr1, direction) ||
     checkBoundries(player, bdrRm2Wtr2, direction) ||
     checkBoundries(player, bdrTunSpk1, direction) ||
-    checkBoundries(player, bdrTunSpk2, direction)
+    checkBoundries(player, bdrTunSpk1, direction) ||
+    checkBoundries(player, bdrTunSpk2, direction) ||
+    checkBoundries(player, brdMainSpk1, direction) ||
+    checkBoundries(player, brdMainSpk2, direction) ||
+    checkBoundries(player, brdMainSpk3, direction) ||
+    checkBoundries(player, brdMainSpk4, direction) ||
+    checkBoundries(player, brdMainSpk5, direction) ||
+    checkBoundries(player, brdMainSpk6, direction) ||
+    checkBoundries(player, brdMainSpk7, direction) ||
+    checkBoundries(player, brdMainSpk8, direction) ||
+    checkBoundries(player, brdMainSpk9, direction) ||
+    checkBoundries(player, brdRm2Spk1, direction) ||
+    checkBoundries(player, brdRm2Spk2, direction) ||
+    checkBoundries(player, brdRm2Spk3, direction) ||
+    checkBoundries(player, brdRm2Spk4, direction)
     // checkBoundries(player, bdr, direction)
     ) {
         return true;
@@ -489,6 +531,7 @@ function engageEnemiesCheck() {
     if (player.inFight === false) {
         engageEnemyCheck(player, orc);
         engageEnemyCheck(player, orc2);
+        engageEnemyCheck(player, AngryOrc);
     }
 }
 
@@ -884,6 +927,7 @@ function gameLoop() {
     // adds all entities back if they are alive.
     orc.alive === true ? orc.render() : null;
     orc2.alive === true ? orc2.render() : null;
+    AngryOrc.alive === true ? AngryOrc.render() : null;
     chest.visible === true ? chest.render() : null;
     chest2.visible === true ? chest2.render() : null;
     prisoner1.isAlive === true ? prisoner1.render() : null;
