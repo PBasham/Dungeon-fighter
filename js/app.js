@@ -227,7 +227,7 @@ function loadUp() {
 
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "../imgs/The_Hero/HeroStand.jpg",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, ["basic-sword", "basic-shield"]);
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStand.jpg",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, ["basic-sword", "basic-shield"]);
     // create enemies
     orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace", "none","leather tunic"]);
     orc2 = new Entity("Orc", "./imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace",  "none","leather tunic"]);
