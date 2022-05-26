@@ -215,7 +215,6 @@ class Boundry {
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
-
 // class UserInterface {
 //     constructor(x, y, height, width)
 // }
