@@ -2,6 +2,7 @@ console.log("We're connected!");
 let game = document.querySelector("#game");
 let ctx = game.getContext("2d"); // NOTE: creates two dimensional canvas.
 
+// get elements from documents.
 let start_btn = document.getElementById("startGame-btn");
 let screen_start = document.getElementById("screen-start");
 let screen_fight = document.getElementById("screen-fight");
@@ -16,8 +17,12 @@ let defend_btn = document.getElementById("defend-btn");
 let playerHealth = document.getElementById("health-fill");
 let fight_enemy_name = document.getElementById("fight-enemyName");
 let fight_enemy_health = document.getElementById("fight-enemyHealth-fill");
+let instructions_btn = document.getElementById("instructions-btn");
+let instructionsClose_btn = document.getElementById("instructions-close");
+let instructionsPage = document.getElementById("instructions");
+//
 
-
+// === *** SECTION: Global Variables === *** //
 let player;
 let playerSprite = ""
 let orc;
@@ -31,31 +36,47 @@ let gameOver = false;
 let prisonerCount = 1;
 let prisonersSaved = 0;
 let baseCritChance = 5;
-// === *** DECLARE BOUNDRIES *** === //
+
+// === *** DECLARE BOUNDRIES *** === // NOTE: It seems I didn't need to declare these globaly.
 // check to see where the player is, adjust the boundries accordingly.
-let bdrMain1;
-let bdrMain2;
-let bdrMain3;
-let bdrMain4;
-let bdrMain5;
-let bdrMain6;
-let bdrMain7;
-let bdrMain8;
-let bdrMain9;
-let bdrMainTransition;
-let bdrTun1_1;
-let bdrTun1_2;
-let bdrRm2Lf1;
-let bdrRm2BtLf;
-let bdrRm2Bot;
-let bdrRm2BtRt1;
-let bdrRm2BtRt2;
-let bdrRm2Rt;
-let bdrRm2Wtr1;
-let bdrRm2Wtr2;
+// let bdrMain1;
+// let bdrMain2;
+// let bdrMain3;
+// let bdrMain4;
+// let bdrMain5;
+// let bdrMain6;
+// let bdrMain7;
+// let bdrMain8;
+// let bdrMain9;
+// let bdrMainTransition;
+// let bdrTun1_1;
+// let bdrTun1_2;
+// let bdrRm2Lf1;
+// let bdrRm2BtLf;
+// let bdrRm2Bot;
+// let bdrRm2BtRt1;
+// let bdrRm2BtRt2;
+// let bdrRm2Rt;
+// let bdrRm2Wtr1;
+// let bdrRm2Wtr2;
+// let bdrTunSpk1;
+// let bdrTunSpk2;
+// let brdMainSpk1;
+// let brdMainSpk2;
+// let brdMainSpk3;
+// let brdMainSpk4;
+// let brdMainSpk5;
+// let brdMainSpk6;
+// let brdMainSpk7;
+// let brdMainSpk8;
+// let brdMainSpk9;
+// let brdRm2Spk1;
+// let brdRm2Spk2;
+// let brdRm2Spk3;
+// let brdRm2Spk4;
 
-
-// === *** DECLARE BOUNDRIES *** === //
+// === *** DECLARE-BOUNDRIES-END *** === 
+// === *** SECTION: Global-END Variables-END === *** //
 
 // game.setAttribute("height", "608");
 // game.setAttribute("width", "1216");
@@ -75,9 +96,9 @@ class Entity {
         this.health = health;
         this.attack = attack;
         this.defence = defence;
+        this.inventory = inventory;
         this.selectedWep = inventory[0];
         this.selectedDefence = inventory[1];
-        this.inventory = inventory;
         this.Keys = 1;
         this.inFight = false;
         this.alive = true;
@@ -200,7 +221,8 @@ class Boundry {
 // }
 
 // load contents when DOM has loaded NOTE: or when start button is clicked??
-window.addEventListener("DOMContentLoaded", function(e) {
+function loadUp() {
+// window.addEventListener("DOMContentLoaded", function(e) {
     console.log("DOM has loaded!");
 
     // create and set entities on board
@@ -219,8 +241,16 @@ window.addEventListener("DOMContentLoaded", function(e) {
 
     const runGame = setInterval(gameLoop, 120);
     
-})
+};
+loadUp();
 
+
+instructions_btn.addEventListener("click",() => {
+    instructionsPage.style.display = "block";
+});
+instructionsClose_btn.addEventListener("click",() => {
+    instructionsPage.style.display = "none";
+});
 start_btn.addEventListener("click", startScreenTransition);
 
 
@@ -242,6 +272,7 @@ function startScreenTransition() {
     
     setTimeout( function() {
         // change player.movementState = true;
+        console.log(player);
         player.moveState = true;
         // hide startscreen and buttons
         screen_start.style.display = "none";
@@ -339,11 +370,11 @@ function setBoundaries() {
     brdMainSpk6 = new Boundry("MainSpk6", 17, 9, 1,1);
     brdMainSpk7 = new Boundry("MainSpk7", 19, 9, 1,1);
     brdMainSpk8 = new Boundry("MainSpk8", 5, 8, 2,1);
-    brdMainSpk9 = new Boundry("MainSpk8", 34, 9, 1,1);
-    brdRm2Spk1 = new Boundry("MainSpk8", 27, 13, 1,1);
-    brdRm2Spk2 = new Boundry("MainSpk8", 32, 14, 1,1);
-    brdRm2Spk3 = new Boundry("MainSpk8", 27, 16, 1,1);
-    brdRm2Spk4 = new Boundry("MainSpk8", 28,17, 1,1);
+    brdMainSpk9 = new Boundry("MainSpk9", 34, 9, 1,1);
+    brdRm2Spk1 = new Boundry("Rm2Spk1", 27, 13, 1,1);
+    brdRm2Spk2 = new Boundry("Rm2Spk2", 32, 14, 1,1);
+    brdRm2Spk3 = new Boundry("Rm2Spk3", 27, 16, 1,1);
+    brdRm2Spk4 = new Boundry("Rm2Spk4", 28,17, 1,1);
     // bdr = new Boundry("", , , , );
     
 }
@@ -425,7 +456,6 @@ function checkBoundryCollison(direction) {
     checkBoundries(player, bdrRm2Wtr1, direction) ||
     checkBoundries(player, bdrRm2Wtr1, direction) ||
     checkBoundries(player, bdrRm2Wtr2, direction) ||
-    checkBoundries(player, bdrTunSpk1, direction) ||
     checkBoundries(player, bdrTunSpk1, direction) ||
     checkBoundries(player, bdrTunSpk2, direction) ||
     checkBoundries(player, brdMainSpk1, direction) ||
@@ -535,8 +565,6 @@ function engageEnemiesCheck() {
     }
 }
 
-
-
 function engageEnemyCheck(player, enemy) {
     if (enemy.alive === false) {
         return;
@@ -561,7 +589,6 @@ function engageEnemyCheck(player, enemy) {
         fight(player,enemy);
     }
 }
-
 
 /*  ===        battle turns         === */
 function enemyTurn(enemy){
@@ -621,8 +648,6 @@ let enemyDefence = 0;
     }
 }
 
-
-
 function playerTurn(player, playerIntent) {
     // if (player.inFight === false) {
     //     return;
@@ -669,8 +694,6 @@ function battleScreenTransition() {
     }, 50);
 }
 // evey time a fight button is clicked, do player action, check if anyone is dead, then computer action, check if anyone is dead. if not allow to press again.
-
-
 
 function combatTurn(enemy, playerIntent, enemyIntent) {
     let netDamage = 0;
@@ -769,9 +792,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
 
 
 }
-
-        
-        
+   
 /****** FIGHT ******/
 function fight(player, enemy){
     fight_enemy_name.textContent = enemy.name; 
@@ -866,11 +887,9 @@ function fight(player, enemy){
 }
 /****** FIGHT END ******/
 
-
 function randomTo100(){
     return (Math.floor(Math.random() * 100) + 1);
 }
-
 
 // SECTION: Looting ========================================//
 function lootingDetect(){
@@ -914,7 +933,6 @@ function looting(lootable) {
 function gameLoop() {
     // clears all entities from screen
     ctx.clearRect(0, 0, game.width, game.height);
-
     // set boundries
     renderBoundries()
     // check to see if the player is currently in a fight.

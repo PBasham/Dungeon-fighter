@@ -32,17 +32,25 @@
                 
                 <div id="equiped-weapon" class="inventory-slot">
                     <p class="inventory-header">Weapon</p>
+                    <img src="./imgs/Items/sword_basic_inventory.png" alt="">
                 </div>
                 
                 <div id="equiped-shield" class="inventory-slot">
                     <p class="inventory-header">Shield</p>
+                    <img src="./imgs/Items/shield_basic_inventory.png" alt="">
                 </div>
                 
                 <div id="item-area">
                     <p class="inventory-header">Items</p>
-                    <div id="item1" class="inventory-item"></div>
-                    <div id="item2" class="inventory-item"></div>
-                    <div id="item3" class="inventory-item"></div>
+                    <div id="item1" class="inventory-item">
+                        <img src="./imgs/Items/potion_health_1.png" alt="">
+                    </div>
+                    <div id="item2" class="inventory-item">
+                        <img src="" alt="">
+                    </div>
+                    <div id="item3" class="inventory-item">
+                        <img src="" alt="">
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,6 +62,22 @@
             <input id="instructions-btn" type="checkbox"></button>
             <label for="instructions-btn"  class="startScreen-btn instructions-btn-label">Instructions
             </label>
+            <div id="instructions">
+                <div id="instructions-close">X</div>
+                <!-- how to player the game -->
+                <h2>Instructions</h2>
+                <p>
+                    Welcome to my game!, Your goal is to traverse a cave and rescue your friend that is being held captive by the Orcs! 
+                </p>
+                <h3>How to play</h3>
+                <p>You (the <span id="teal">teal</span> colored shape)will use <span id="orange">W-"Up"</span>, <span id="orange">A-"Left"</span>, <span id="orange">S-"Down"</span>, 
+                    <span id="orange">D-"Right"</span> to move around until you engage with an enemy (the <span id="green">green</span> tinted shapes)by walking over them. Once in a fight, the fight buttons at the bottom left corner of the screen will turn active and the round wills start off with the enemy showing you their intent! This means they will show you if they are going to attack or defend. You will have to decide each turn if it's better for you to respond with attacking or defending by using the mouse to select one of the fight buttons. The battle ends if you or your enemy's health reaches zero! If your health reaches zero, this results in a <span id="red">game over</span>!
+                </p>
+                <h3>Win condition</h3>
+                <p>
+                    To win, you need to defeat any Orcs in your way and reach your friend(the <span id="yellow">yellow</span> shape)! Once you reach them, you win!
+                </p>
+            </div>
         </div>
         
         <div id="screen-fight">
