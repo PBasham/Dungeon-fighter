@@ -216,15 +216,33 @@ class Boundry {
     }
 }
 
-// class UserInterface {
-//     constructor(x, y, height, width)
-// }
+// audio setup
+// ==== **** **** ==== //
+aud_quickKnifeSlash = new Audio("./music/sound_effects/short-knife-whoosh-fx.wav")
+function musicLoopCave() {
+    caveSoundStrack = new Audio("./music/cave/Temp_DF-caveMusic.mp3"); 
+    if (typeof caveSoundStrack.loop == 'boolean')
+    {
+    caveSoundStrack.loop = true;
+    }
+    else
+    {
+    caveSoundStrack.addEventListener('ended', function() {
+        this.currentTime = 0;
+        this.play();
+    }, false);
+    }
+    caveSoundStrack.play();
+}
 
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
 // load contents when DOM has loaded NOTE: or when start button is clicked??
 function loadUp() {
-// window.addEventListener("DOMContentLoaded", function(e) {
+    // window.addEventListener("DOMContentLoaded", function(e) {
     console.log("DOM has loaded!");
-
+        
     // create and set entities on board
     // create player
     player = new Entity("Hero", "./imgs/The_Hero/HeroStand.jpg",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, ["basic-sword", "basic-shield"]);
@@ -252,6 +270,7 @@ instructionsClose_btn.addEventListener("click",() => {
     instructionsPage.style.display = "none";
 });
 start_btn.addEventListener("click", startScreenTransition);
+start_btn.addEventListener("click", musicLoopCave);
 
 
 function startScreenTransition() {
@@ -701,6 +720,9 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
 
         if (enemyIntent.Intent === "attacking"){
             // both attacking, run players hit
+            aud_quickKnifeSlash.play();
+            console.log("1 second later");
+
             enemy.health -= playerIntent.for;
             fight_enemy_health.style.width = (enemy.health * 20) + "px";
             console.log(`You strike your enemy for ${playerIntent.for} damage!`);
@@ -709,6 +731,8 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             if (enemy.health <= 0) {
                 return {"battleOver":true,"outcome":"playerWin"};
             }
+                
+
             // run enemy hit
             player.health -= enemyIntent.for;
             // change player healthbar
