@@ -233,7 +233,7 @@ function loadUp() {
     orc2 = new Entity("Orc", "./imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace",  "none","leather tunic"]);
     AngryOrc = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2,["better-mace", "leather pants"]);
     // create lootables
-    chest = new Lootable("Silver Chest", "./imgs/lootables/chest/SilverChest.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
+    chest = new Lootable("Silver Chest", "./imgs/lootables/chest/silverChest.png", 3, 14, 0, "silver", 2, 1, false, "better-sword");
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
 
     prisoner1 = new Prisoner("Steve","./imgs/prisoner/prisoner.png",{x:30,y: 16}, {w:1,h: 1})    // set boundries to walls
