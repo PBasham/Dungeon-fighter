@@ -257,7 +257,6 @@ body {
 }
 
 #fight-btns {
-    display: flex;
     position: absolute;
     bottom: 12.5px;
     left: 12.5px;
@@ -267,14 +266,17 @@ body {
     opacity: 0;
     z-index: 8;
 }
-
+#fightBtn-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 125px;
+    width: 589.25px;
+}
 .fight-btn{
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin-top: 25px;
-    margin-left: 25px;
-    padding: auto;
+    justify-content: space-evenly;
     width: 150px;
     height: 75px;
     color: var(--color-offwhite);
