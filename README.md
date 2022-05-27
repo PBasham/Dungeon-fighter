@@ -18,13 +18,13 @@ As a user I want to
 8. If enemy loses all of their health, get key.
 9. If you have the key, unlock door to rescue prisoner.
 ---
-##Technologies Used:
+## Technologies Used:
 * HTML
 * CSS
 * JavaScript (logic and DOM manipulation)
 * Canvas
 
-##Wireframes:
+## Wireframes:
 
 ### Start screen
 
