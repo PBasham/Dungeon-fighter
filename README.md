@@ -16,10 +16,11 @@ As a user I want to
 6. If the palyer collides with a lootable object the chest will change to an opened image, a sound will play, and the player will get a loot item.
 7. When the player collides with the enemy initiate a fight. √
 8. Allow attack / defend for player and enemy to interect correctly and track. √
-9. On the players turn a message will display what the enemies intent is. ∆
-10. If player loses all of their health, bring up lose screen. √ 
-11. If enemy loses all of their health transition back to the movestate on the main game screen. √ 
-12. If the player reaches the prisoner the screen will transition to the win screen. √
+9. On the players turn a message will display what the enemies intent is. √
+10. The player will be able to use a health potion from their inventory to heal during or after battle.
+11. If player loses all of their health, bring up lose screen. √ 
+12. If enemy loses all of their health transition back to the movestate on the main game screen. √ 
+13. If the player reaches the prisoner the screen will transition to the win screen. √
 ---
 ## Technologies Used:
 * HTML
@@ -42,3 +43,8 @@ As a user I want to
 
 ## Knows BUGS:
 * Sometimes when moving at full velocity it's possible to get past enemies without engaging. (speedrun strat?)
+
+## Future Plans:
+* Lootable objects  
+  * I want to make the lootable objects search through an array and give the player a random item / weapon.
+* The player will be able to swap out their equiped weapon / defence item.

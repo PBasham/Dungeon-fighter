@@ -855,7 +855,6 @@ function fight(player, enemy){
         fight_buttons.item(i).classList.remove("inactive-btn");
     }
 
-    // BUG: need to make enmy health dynamic
     fight_enemy_health.style.width = ((enemy.health) / (enemy.maxHealth) * 100) + "%"
     
     // transition to fight screen if it has not already started.
