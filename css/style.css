@@ -297,9 +297,9 @@ body {
 .startScreen-btn:hover {
     background-color: rgb(60, 191, 230);
 }
-#instructions-btn {
+/* #instructions-btn {
     height: 100px;
-}
+} */
 
 #instructions {
     display: none;
