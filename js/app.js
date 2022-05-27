@@ -2,7 +2,7 @@ console.log("We're connected!");
 let game = document.querySelector("#game");
 let ctx = game.getContext("2d"); // NOTE: creates two dimensional canvas.
 
-// get elements from documents.
+// SECTION: get elements from documents.
 let start_btn = document.getElementById("startGame-btn");
 let screen_start = document.getElementById("screen-start");
 let screen_fight = document.getElementById("screen-fight");
@@ -20,6 +20,8 @@ let fight_enemy_health = document.getElementById("fight-enemyHealth-fill");
 let instructions_btn = document.getElementById("instructions-btn");
 let instructionsClose_btn = document.getElementById("instructions-close");
 let instructionsPage = document.getElementById("instructions");
+let message_area = document.getElementById("message-area");
+let displayMessage = document.getElementById("message")
 //
 
 // === *** SECTION: Global Variables === *** //
@@ -235,6 +237,7 @@ function musicLoopCave() {
     caveSoundStrack.play();
 }
 
+// NOTE: this could be used with async functions to create a delay between functions.
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
   }
@@ -255,6 +258,7 @@ function loadUp() {
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
 
     prisoner1 = new Prisoner("Steve","./imgs/prisoner/prisoner.png",{x:30,y: 16}, {w:1,h: 1})    // set boundries to walls
+    message_area.innerHTML = `You enter the cave`
     setBoundaries()
 
     const runGame = setInterval(gameLoop, 120);
@@ -609,14 +613,18 @@ function engageEnemyCheck(player, enemy) {
         return null;
     }
     if (hitTest) {
-        console.log(`Engage Fight!\nThis enemy has ${enemy.selectedWep} equiped.\nInventory:${enemy.inventory}`);
         // TODO: this should then change screen to fight screen and change player movementState to false.
         if (enemy.alive === false){
             return;
         }
+        console.log(`Engage Fight!\nThis enemy has ${enemy.selectedWep} equiped.\nInventory:${enemy.inventory}`);
+        message_area.innerHTML = `You've engaged combat with ${enemy.name}!`;
         player.moveState = false;
         player.inFight = true;
-        fight(player,enemy);
+        setTimeout(function(){
+            fight(player,enemy);
+        }
+        ,1000);
     }
 }
 
@@ -732,11 +740,12 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
         if (enemyIntent.Intent === "attacking"){
             // both attacking, run players hit
             aud_quickKnifeSlash.play();
-            console.log("1 second later");
 
             enemy.health -= playerIntent.for;
-            
-            fight_enemy_health.style.width = ((enemy.health) / (enemy.maxHealth) *100) + "%";
+            if (enemy.health < 0){
+                enemy.health = 0;
+            }
+            fight_enemy_health.style.width = ((enemy.health) / (enemy.maxHealth) * 100) + "%";
             console.log(`You strike your enemy for ${playerIntent.for} damage!`);
             console.log(`${enemy.name} is at ${enemy.health}hp`);
             // then check if enemy is killed
@@ -771,9 +780,12 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             // enemy is defending,
             netDamage = playerIntent.for - enemyIntent.for;
             if (netDamage > 0) {
-
+                aud_quickKnifeSlash.play();
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
                 enemy.health -= netDamage;
+                if (enemy.health < 0){
+                    enemy.health = 0;
+                }
                 fight_enemy_health.style.width = ((enemy.health / enemy.maxHealth )* 100) + "%";
                 console.log(`You strike your enemy for ${netDamage} damage!`);
                 // then check if enemy is killed
@@ -850,8 +862,11 @@ function fight(player, enemy){
     battleScreenTransition();
     
     console.log("Battle is happeing!")
-    
     let enemyMove = enemyTurn(enemy);
+    setTimeout(function(){
+        message_area.innerHTML = `${enemy.name} intends to ${enemyMove.Intent} for ${enemyMove.for}<br />What will you do?<brWhat will you do?`;
+    }
+    ,1000);
     
     function handleClickAttack(){
         attack_btn.removeEventListener("click", handleClickAttack);
@@ -865,11 +880,12 @@ function fight(player, enemy){
             console.log("battle is over!");
             resultCheck(result.outcome);
         } else {
+            enemyMove = enemyTurn(enemy)
             setTimeout(function() {
                 attack_btn.addEventListener("click", handleClickAttack);
                 defend_btn.addEventListener("click", handleClickDefend);
-                enemyMove = enemyTurn(enemy)
-            }, 1000);
+                message_area.innerHTML = `${enemy.name} intends to ${enemyMove.Intent} for ${enemyMove.for}<br />What will you do?`;
+            }, 1500);
         }
     }
 
@@ -885,34 +901,51 @@ function fight(player, enemy){
             console.log("battle is over!");
             resultCheck(result.outcome);
         } else {
+            enemyMove = enemyTurn(enemy)
             setTimeout(function() {
                 attack_btn.addEventListener("click", handleClickAttack);
                 defend_btn.addEventListener("click", handleClickDefend);
-                enemyMove = enemyTurn(enemy)
-            }, 1000);
+                message_area.innerHTML = `${enemy.name} intends to ${enemyMove.Intent} for ${enemyMove.for}<br />What will you do?`;
+            }, 1500);
         }
     }
-    
-
     // check the outcome of the fight.
     function resultCheck(result){
         // if player won {
             if (result === "playerWin"){
-                enemy.alive = false;
+                message_area.innerHTML = `You have vanquised ${enemy.name} and taken<br /> 'insert item here' from it`;
                 console.log(enemy);
                 console.log("Player gets loot");
-                player.inFight = false
-                player.moveState = true;
-                battleTransition = false
+                enemy.alive = false;
+                setTimeout(function() {
+                    player.inFight = false
+                    player.moveState = true;
+                    battleTransition = false
+                    if (player.health > (player.maxHealth / 2)) {
+                        message_area.innerHTML = 'You continue through the cave.';
+                    } else if (player.health > (player.maxHealth / .25)){
+                        message_area.innerHTML = `You're hurt but can still carry on.`;
+                    } else {
+                        message_area.innerHTML = `You are hurt badly, you are not confident to fight again.`;
+                    }
+                }, 4000);
                 
             } else {
                 // the player died! pull up lose screen and maybe reset button?
                 console.log("Oh, you lost!");
-                gameOver = true;
-                // pull over lost screen!
-                screen_lose.style.zIndex = 6;
+                message_area.innerHTML = `You've been bested by ${enemy.name}...`;
+                setTimeout(function(){
+                    message_area.innerHTML = '';
+                    gameOver = true;
+                    // pull over lost screen!
+                    screen_lose.style.zIndex = 6;
+                }, 2000)
             }
-            screen_fight.style.left = "1216px";
+
+
+            setTimeout(function() {
+                screen_fight.style.left = "1216px";
+            }, 4000);
             for (let i = 0; i < fight_buttons.length; i++) {
                 fight_buttons.item(i).classList.remove("active-btn");
                 fight_buttons.item(i).classList.add("inactive-btn");
@@ -920,6 +953,7 @@ function fight(player, enemy){
             attack_btn.removeEventListener("click", handleClickAttack);
             defend_btn.removeEventListener("click", handleClickDefend);
     }
+    
 }
 /****** FIGHT END ******/
 

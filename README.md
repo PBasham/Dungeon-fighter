@@ -39,3 +39,6 @@ As a user I want to
 ![Image of win screen]()
 ### Lose screen
 ![Image of lose screen]()
+
+## Knows BUGS:
+* Sometimes when moving at full velocity it's possible to get past enemies without engaging. (speedrun strat?)
