@@ -22,6 +22,9 @@ let instructionsClose_btn = document.getElementById("instructions-close");
 let instructionsPage = document.getElementById("instructions");
 let message_area = document.getElementById("message-area");
 let displayMessage = document.getElementById("message")
+let inv_item1 = document.querySelector("#item1 img");
+let inv_item2 = document.querySelector("#item2 img");
+let inv_item3 = document.querySelector("#item3 img");
 //
 
 // === *** SECTION: Global Variables === *** //
@@ -87,7 +90,7 @@ game.setAttribute("height", "908");
 game.setAttribute("width", "1216");
 
 class Entity {
-    constructor(name, imgSrc, x, y, color, width, height, maxHealth, health, attack, defence, inventory) {
+    constructor(name, imgSrc, x, y, color, width, height, maxHealth, health, attack, defence, equiped, inventory) {
         this.name = name;
         this.x = x * 32;
         this.y = (y * 32) + 150;
@@ -98,9 +101,10 @@ class Entity {
         this.health = health;
         this.attack = attack;
         this.defence = defence;
+        this.equiped = equiped;
         this.inventory = inventory;
-        this.selectedWep = inventory[0];
-        this.selectedDefence = inventory[1];
+        this.selectedWep = equiped.weapon;
+        this.selectedDefence = equiped.defenceItem;
         this.Keys = 1;
         this.inFight = false;
         this.alive = true;
@@ -218,6 +222,24 @@ class Boundry {
     }
 }
 
+
+let items = {
+    potions: 
+    {
+        potion_healing: 
+        {
+            imgSrc: "./imgs/Items/potion_health_1.png",
+            value: 10
+        }
+    },
+    thrown:
+    {
+        bomb: {
+            imgSrc: "./imgs/Items/bomb.png",
+            damage: 4
+        }
+    }
+}
 // audio setup
 // ==== **** **** ==== //
 aud_quickKnifeSlash = new Audio("./music/sound_effects/short-knife-whoosh-fx.wav")
@@ -248,11 +270,18 @@ function loadUp() {
         
     // create and set entities on board
     // create player
-    player = new Entity("Hero", "./imgs/The_Hero/HeroStand.jpg",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, ["basic-sword", "basic-shield"]);
+    player = new Entity("Hero", "./imgs/The_Hero/HeroStand.jpg",3, 5, "blue", 1, 1, 10, 10, [2,5], 3, 
+    {
+        weapon: "basic-sword" ,
+        defenceItem: "basic-shield",
+        item1: [`potions`,"potion_healing"],
+        item2: ["thrown","bomb"],
+        item3: null
+    }, []);
     // create enemies
-    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace", "none","leather tunic"]);
-    orc2 = new Entity("Orc", "./imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, ["mace",  "none","leather tunic"]);
-    AngryOrc = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2,["better-mace", "leather pants"]);
+    orc = new Entity("Orc", "./imgs/Enemies/Orc1.png",19, 6, "darkGreen", 1, 1, 10, 10, [1,3], 3, {weapon: "mace", defenceItem: "none"}, ["mace","leather tunic"]);
+    orc2 = new Entity("Orc", "./imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, {weapon: "mace", defenceItem: "none"}, ["mace","leather tunic"]);
+    AngryOrc = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2,{weapon: "better-mace", defenceItem: "none"}, ["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/silverChest.jpg", 3, 14, 0, "silver", 2, 1, false, "better-sword");
     chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
@@ -266,6 +295,30 @@ function loadUp() {
 };
 loadUp();
 
+function playerInventory() {
+    console.log(inv_item1)
+    for (let i = 1;i <= 3; i++){
+        if (player.equiped[`item${i}`] !== null){
+            let itemInSlot = player.equiped[`item${i}`];
+            console.log(itemInSlot)
+            let itemInSlotInfo = items[`${itemInSlot[0]}`];
+            console.log(itemInSlotInfo);
+            let itemInSlotName = itemInSlotInfo[`${itemInSlot[1]}`];
+            console.log(itemInSlotName);
+            console.log(`${itemInSlotName.imgSrc}`);
+            if (i === 1) {
+                inv_item1.src = `${itemInSlotName.imgSrc}`;
+            } else if (i === 2) {
+                inv_item2.src = `${itemInSlotName.imgSrc}`;
+            } else if (i === 3) {
+                inv_item3.src = `${itemInSlotName.imgSrc}`;
+            }
+            console.log(inv_item1.src)
+        }
+    }
+
+}
+playerInventory();
 
 instructions_btn.addEventListener("click",() => {
     instructionsPage.style.display = "block";
@@ -280,9 +333,6 @@ function startBtnClick() {
     startScreenTransition()
     musicLoopCave()
 }
-
-// start_btn.addEventListener("click",musicLoopCave );
-
 
 function startScreenTransition() {
     console.log("Start Game!");
