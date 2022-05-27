@@ -246,7 +246,12 @@ class Boundry {
 // }
 // audio setup
 // ==== **** **** ==== //
-aud_quickKnifeSlash = new Audio("./music/sound_effects/short-knife-whoosh-fx.wav")
+aud_quickKnifeSlash = new Audio("./music/sound_effects/short-knife-whoosh-fx.wav");
+aud_chest_open = new Audio("./music/sound_effects/chest/chest_open.wav");
+aud_chest_locked = new Audio("./music/sound_effects/chest/chest_locked.wav");
+aud_chest_unlock = new Audio("./music/sound_effects/chest/chest_unlock.wav");
+
+
 function musicLoopCave() {
     caveSoundStrack = new Audio("./music/cave/Temp_DF-caveMusic.mp3"); 
     if (typeof caveSoundStrack.loop == 'boolean')
@@ -278,8 +283,8 @@ function loadUp() {
     {
         weapon: "basic-sword" ,
         defenceItem: "basic-shield",
-        item1: [`potions`,"potion_healing"],
-        item2: ["thrown","bomb"],
+        item1: [`potions`,"potion_healing", 1],
+        item2: ["thrown","bomb", 1],
         item3: null
     }, []);
     // create enemies
@@ -1164,13 +1169,16 @@ function looting(lootable) {
     if (!lootable.locked){
         lootable.looted = true;
         // lootable.loot();
+        aud_chest_open.play();
         return console.log(`You loot the chest and get ${lootable.contains}`);
     } else if (player.Keys > 0){
         player.Keys--;
         lootable.looted = true;
         // lootable.loot();
+        aud_chest_unlock.play();
         return console.log(`You unlocked the chest!\nThis chest contains ${lootable.contains}\nYou have ${player.Keys} keys remainng.`);
     } else {
+        aud_chest_locked.play();
         return console.log("You need a key to open this chest!");
     }
 }
