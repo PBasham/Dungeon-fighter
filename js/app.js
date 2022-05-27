@@ -269,8 +269,15 @@ instructions_btn.addEventListener("click",() => {
 instructionsClose_btn.addEventListener("click",() => {
     instructionsPage.style.display = "none";
 });
-start_btn.addEventListener("click", startScreenTransition);
-start_btn.addEventListener("click", musicLoopCave);
+start_btn.addEventListener("click", startBtnClick);
+
+function startBtnClick() {
+    start_btn.removeEventListener("click", startBtnClick)
+    startScreenTransition()
+    musicLoopCave()
+}
+
+// start_btn.addEventListener("click",musicLoopCave );
 
 
 function startScreenTransition() {
@@ -394,6 +401,7 @@ function setBoundaries() {
     brdRm2Spk2 = new Boundry("Rm2Spk2", 32, 14, 1,1);
     brdRm2Spk3 = new Boundry("Rm2Spk3", 27, 16, 1,1);
     brdRm2Spk4 = new Boundry("Rm2Spk4", 28,17, 1,1);
+    brdMainPit = new Boundry("MainPit", 7,4, 1,1);
     // bdr = new Boundry("", , , , );
     
 }
@@ -441,7 +449,8 @@ function renderBoundries() {
     brdRm2Spk1.render();
     brdRm2Spk2.render();
     brdRm2Spk3.render();
-    brdRm2Spk4.render();  
+    brdRm2Spk4.render();
+    brdMainPit.render();  
 }
 
 function checkBoundryCollison(direction) {
@@ -489,7 +498,9 @@ function checkBoundryCollison(direction) {
     checkBoundries(player, brdRm2Spk1, direction) ||
     checkBoundries(player, brdRm2Spk2, direction) ||
     checkBoundries(player, brdRm2Spk3, direction) ||
-    checkBoundries(player, brdRm2Spk4, direction)
+    checkBoundries(player, brdRm2Spk4, direction) ||
+    checkBoundries(player, brdMainPit, direction)
+
     // checkBoundries(player, bdr, direction)
     ) {
         return true;

@@ -2,7 +2,7 @@
 
 # Premise:
 
-This game is about a hero tavling through a dungeon to defeat the dastardly <span style="color:green">orcs</span> keeping your friend prisioner! 
+This game is about a hero tavling through a dungeon to defeat the dastardly orcs keeping your friend prisioner! 
 
 <!-- add reference links here to all sections-->
 ---
