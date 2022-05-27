@@ -1,9 +1,10 @@
 # GA-Proj1-Dungeon-fighter
 
-Premise:
+#Premise:
 
 This game is about a hero tavling through a dungeon to defeat the dastardly orc keeping your friend prisioner! 
 
+```
 
 User Story
 As a user I want to
