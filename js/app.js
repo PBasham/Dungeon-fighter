@@ -724,7 +724,8 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             console.log("1 second later");
 
             enemy.health -= playerIntent.for;
-            fight_enemy_health.style.width = (enemy.health * 20) + "px";
+            
+            fight_enemy_health.style.width = ((enemy.health) / (enemy.maxHealth) *100) + "%";
             console.log(`You strike your enemy for ${playerIntent.for} damage!`);
             console.log(`${enemy.name} is at ${enemy.health}hp`);
             // then check if enemy is killed
@@ -737,7 +738,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             player.health -= enemyIntent.for;
             // change player healthbar
             player.health < 0 ? player.health = 0 : null;
-            playerHealth.style.width = (player.health * 20) + "px";
+            playerHealth.style.width = ((player.health / player.maxHealth) * 100) + "%";
             console.log(`${enemy.name} strikes you for ${enemyIntent.for} damage!`);
             console.log(`${player.name} is at ${player.health}hp`);
             
@@ -762,7 +763,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
 
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
                 enemy.health -= netDamage;
-                fight_enemy_health.style.width = (enemy.health * 20) + "px";
+                fight_enemy_health.style.width = ((enemy.health / enemy.maxHealth )* 100) + "%";
                 console.log(`You strike your enemy for ${netDamage} damage!`);
                 // then check if enemy is killed
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
@@ -795,7 +796,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
                 // you take damage
                 player.health -= netDamage;
                 player.health < 0 ? player.health = 0 : null;
-                playerHealth.style.width = (player.health * 20) + "px";
+                playerHealth.style.width = ((player.health / player.maxHealth) * 100) + "%";
                 console.log(`${player.name} blocked but still took ${netDamage} damage!`);
             } else {
                 console.log(`${player.name} blocked ${enemy.name}'s attack!`);
@@ -831,8 +832,8 @@ function fight(player, enemy){
         fight_buttons.item(i).classList.remove("inactive-btn");
     }
 
-    fight_enemy_health.style.width = (enemy.health * 20) + "px"; // BUG: didn't change enemy health on second encounter. 
     // BUG: need to make enmy health dynamic
+    fight_enemy_health.style.width = ((enemy.health) / (enemy.maxHealth) * 100) + "%"
     
     // transition to fight screen if it has not already started.
     battleScreenTransition();
