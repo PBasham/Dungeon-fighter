@@ -2,9 +2,10 @@
 
 # Premise:
 
-``` This game is about a hero tavling through a dungeon to defeat the dastardly orc keeping your friend prisioner! 
+This game is about a hero tavling through a dungeon to defeat the dastardly orc keeping your friend prisioner! 
 
 <!-- add reference links here to all sections-->
+---
 ## User Story  
 As a user I want to
 1. See a start screen that will allow "Embark into the dungeon" or click on "Instructions" to learn how to play.
@@ -16,7 +17,7 @@ As a user I want to
 7. If player loses all of their health, bring up lose screen.
 8. If enemy loses all of their health, get key.
 9. If you have the key, unlock door to rescue prisoner.
-
+---
 ##Technologies Used:
 * HTML
 * CSS
