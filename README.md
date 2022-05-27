@@ -36,15 +36,20 @@ As a user I want to
 ![Image of main screen](imgs/ReadMe/wireframe_mainScreen.jpg)
 ### Fight screen
 ![Image of fight screen](imgs/ReadMe/wireframe_fightScreen.jpg)
-### Win screen
+<!-- ### Win screen
 ![Image of win screen]()
 ### Lose screen
-![Image of lose screen]()
+![Image of lose screen]() -->
 
 ## Knows BUGS:
 * Sometimes when moving at full velocity it's possible to get past enemies without engaging. (speedrun strat?)
 
 ## Future Plans:
+* more areas / world generation
+    * I want to make it so the player can move from area to area with screen transitions.  
+    * Different terrain and enemies.
+* Enemies randomly generate on the level.
+* multiple prisoners
 * Lootable objects  
-  * I want to make the lootable objects search through an array and give the player a random item / weapon.
-* The player will be able to swap out their equiped weapon / defence item.
+  * I want to make the lootable objects search through an array and give the player a random item / weapon to add diversity to the gameplay.
+* The player will be able to swap out their equiped weapon / defence item to ones with different stats.
