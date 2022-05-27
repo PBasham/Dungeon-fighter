@@ -1229,11 +1229,13 @@ function looting(lootable) {
 
 
         lootable.looted = true;
-        message_area.innerHTML = `You unlocked the chest!<br /> You got chest ${lootedItemQty}${items[lootedItemType][lootedItemName].name}<br />You have ${player.Keys} keys remainng.`
+        if (usedKey === true) {
+            message_area.innerHTML = `You unlocked the chest!<br /> You got chest ${lootedItemQty} ${items[lootedItemType][lootedItemName].name}<br />You have ${player.Keys} keys remainng.`
+        }
 
         setTimeout(function() {
             message_area.innerHTML = "You continue to traverse the cave.";
-        },1000)
+        },2000)
         return
      
 }
