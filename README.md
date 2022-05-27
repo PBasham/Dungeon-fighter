@@ -4,8 +4,6 @@
 
 This game is about a hero tavling through a dungeon to defeat the dastardly orc keeping your friend prisioner! 
 
-```
-
 User Story
 As a user I want to
 1. See a start screen that will allow "Embark into the dungeon" or click on "Instructions" to learn how to play.
@@ -18,7 +16,7 @@ As a user I want to
 * If enemy loses all of their health, get key.
 * If you have the key, unlock door to rescue prisoner.
 
-Technologies Used
+Technologies Use
 * HTML
 * CSS
 * JavaScript (logic and DOM manipulation)
