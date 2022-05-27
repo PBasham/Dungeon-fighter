@@ -274,7 +274,7 @@ function loadUp() {
     AngryOrc = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2,{weapon: "better-mace", defenceItem: "none"}, ["better-mace", "leather pants"]);
     // create lootables
     chest = new Lootable("Silver Chest", "./imgs/lootables/chest/silverChest.jpg", 3, 14, 0, "silver", 2, 1, false, [["potions","healingOne", 1]]);
-    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, [["weapon","even-better-sword"]]);
+    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, [["potions","healingOne", 1]]);
 
     prisoner1 = new Prisoner("Steve","./imgs/prisoner/prisoner.png",{x:30,y: 16}, {w:1,h: 1})    // set boundries to walls
     message_area.innerHTML = `You enter the cave`
@@ -1202,7 +1202,8 @@ function looting(lootable) {
             
             if (currentSlot === null) {
                 console.log("this can stack into this inventory")
-                currentSlot = [lootedItemType, lootedItemName, lootedItemQty]
+                player.equiped[`item${i}`] = [lootedItemType, lootedItemName, lootedItemQty];
+
                 message_area.innerHTML = `You add ${lootedItemQty} ${items[lootedItemType][lootedItemName].name} to your inventory.`
                 console.log(currentSlot);
                 playerInventory_getImg();
