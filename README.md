@@ -31,15 +31,22 @@ As a user I want to
 ## Wireframes:
 
 ### Start screen
-![Image of start screen concept screen]()
+![Image of start screen concept screen](imgs/ReadMe/wireframe_instructions.png)
+
+### instructions
+![Image of instructions]()
+
 ### Main gameplay screen
 ![Image of main screen](imgs/ReadMe/wireframe_mainScreen.jpg)
 ### Fight screen
-![Image of fight screen](imgs/ReadMe/wireframe_fightScreen.jpg)
-<!-- ### Win screen
-![Image of win screen]()
+![Image of fight screen sketch](imgs/ReadMe/wireframe_fightScreen.jpg)
+![Image of fight screen](imgs/ReadMe/wireframe_fightScreen.png)
+### Win screen
+![Image of win screen](imgs/ReadMe/wireframe_winScreen.png)
 ### Lose screen
-![Image of lose screen]() -->
+![Image of lose screen](imgs/ReadMe/wireframe_winScreen.png)
+
+
 
 ## Knows BUGS:
 * Sometimes when moving at full velocity it's possible to get past enemies without engaging. (speedrun strat?)
