@@ -53,3 +53,5 @@ As a user I want to
 * Lootable objects  
   * I want to make the lootable objects search through an array and give the player a random item / weapon to add diversity to the gameplay.
 * The player will be able to swap out their equiped weapon / defence item to ones with different stats.
+* Add indicators above the inventory items to show quantities.
+* Add animations for message box on top of screen.

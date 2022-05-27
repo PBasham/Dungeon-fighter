@@ -810,7 +810,7 @@ let enemyDefence = 0;
             console.log(`Enemy is defending for ${enemy.defence}!`);
             // show that the enemy is going to block this turn.
             // show number within symbol?
-            return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
+            return objEnemyIntent = {"Intent": "block", "for": enemyDefence};
         } else {
             // attack
             console.log("Enemy is attacking!");
@@ -823,7 +823,7 @@ let enemyDefence = 0;
                 enemyAttack *= 1.5;
             }
             console.log(`Enemy is attacking for ${enemyAttack}!`);
-            return objEnemyIntent = {"Intent": "attacking", "for": enemyAttack};
+            return objEnemyIntent = {"Intent": "attack", "for": enemyAttack};
         }
     } else {
         // if below 50%, its a 50/50 chancee
@@ -834,7 +834,7 @@ let enemyDefence = 0;
             console.log(`Enemy is defending for ${enemy.defence}!`);
             // show that the enemy is going to block this turn.
             // show number within symbol?
-            return objEnemyIntent = {"Intent": "blocking", "for": enemyDefence};
+            return objEnemyIntent = {"Intent": "block", "for": enemyDefence};
         } else {
             // attack
             console.log("Enemy is attacking!");
@@ -848,7 +848,7 @@ let enemyDefence = 0;
                 enemyAttack *= 1.5;
                 console.log(enemyAttack);
             }
-            return objEnemyIntent = {"Intent": "attacking", "for": enemyAttack};
+            return objEnemyIntent = {"Intent": "attack", "for": enemyAttack};
         }
     }
 }
@@ -861,7 +861,7 @@ function playerTurn(player, playerIntent) {
     let objPlayerIntent = {"Intent": playerIntent, "for": 0};
     let playerAttack;
     let playerDefence = 0;
-    if (playerIntent === "attacking") {
+    if (playerIntent === "attack") {
         // player is attacking BUG: get min and max of array and get number between then.
         playerAttack = Math.floor(Math.random() * (player.attack[1] - player.attack[0] + 1)) + player.attack[0];
         // check if player gets critical
@@ -902,9 +902,9 @@ function battleScreenTransition() {
 
 function combatTurn(enemy, playerIntent, enemyIntent) {
     let netDamage = 0;
-    if (playerIntent.Intent === "attacking") {
+    if (playerIntent.Intent === "attack") {
 
-        if (enemyIntent.Intent === "attacking"){
+        if (enemyIntent.Intent === "attack"){
             // both attacking, run players hit
             aud_quickKnifeSlash.play();
 
@@ -915,6 +915,7 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             fight_enemy_health.style.width = ((enemy.health) / (enemy.maxHealth) * 100) + "%";
             console.log(`You strike your enemy for ${playerIntent.for} damage!`);
             console.log(`${enemy.name} is at ${enemy.health}hp`);
+            message_area.innerHTML = `You strike ${enemy.name} for ${playerIntent.for}`
             // then check if enemy is killed
             if (enemy.health <= 0) {
                 return {"battleOver":true,"outcome":"playerWin"};
@@ -928,20 +929,21 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
             playerHealth.style.width = ((player.health / player.maxHealth) * 100) + "%";
             console.log(`${enemy.name} strikes you for ${enemyIntent.for} damage!`);
             console.log(`${player.name} is at ${player.health}hp`);
+            message_area.innerHTML += `<br />but ${enemy.name} strikes you back for ${enemyIntent.for}!`
             
-            // check if player died
-            if (player.health <= 0) {
+                // check if player died
+                if (player.health <= 0) {
+                    return {
+                        "battleOver": true,
+                        "outcome": "playerLost"
+                    };
+                }
+                
+                // if no one is dead, run this.
                 return {
-                    "battleOver": true,
-                    "outcome": "playerLost"
+                    "battleOver": false,
+                    "outcome": ""
                 };
-            }
-
-            // if no one is dead, run this.
-            return {
-                "battleOver": false,
-                "outcome": ""
-            };
         } else {
 
             // enemy is defending,
@@ -955,10 +957,12 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
                 }
                 fight_enemy_health.style.width = ((enemy.health / enemy.maxHealth )* 100) + "%";
                 console.log(`You strike your enemy for ${netDamage} damage!`);
+                message_area.innerHTML += `<br />${enemy.name} blocked but you you managed to hit for ${netDamage}!`
                 // then check if enemy is killed
                 console.log(`${enemy.name} is at ${enemy.health}hp`);
             } else {
-                console.log(`${enemy.name} blocked your attack!`)
+                console.log(`${enemy.name} blocked your attack!`);
+                message_area.innerHTML += `<br />${enemy.name} fully blocked your attack!`;
             }
 
             // if enemy is dead, end combat, else, allow player to go again
@@ -977,9 +981,14 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
         
     } else {
         // player is defending
-        if (enemyIntent === "defending") {
+        if (enemyIntent.Intent === "block") {
             // both players blocking????
             console.log("You both blocked!");
+            message_area.innerHTML += `<br />Everyone blocked??`;
+            return {
+                "battleOver": false,
+                "outcome": ""
+            };
         } else {
             netDamage = enemyIntent.for - playerIntent.for;
             if (netDamage > 0) {
@@ -988,9 +997,12 @@ function combatTurn(enemy, playerIntent, enemyIntent) {
                 player.health < 0 ? player.health = 0 : null;
                 playerHealth.style.width = ((player.health / player.maxHealth) * 100) + "%";
                 console.log(`${player.name} blocked but still took ${netDamage} damage!`);
+                message_area.innerHTML += `<br />${player.name} tried to block but ${enemy.name} managed to hit you for ${enemyIntent.for}`;
             } else {
                 console.log(`${player.name} blocked ${enemy.name}'s attack!`);
+                message_area.innerHTML += `<br />${player.name} fully blocked ${enemy.name}'s attack!`
             }
+
             if (player.health <= 0) {
                 return {
                     "battleOver": true,
@@ -1030,7 +1042,7 @@ function fight(player, enemy){
     console.log("Battle is happeing!")
     let enemyMove = enemyTurn(enemy);
     setTimeout(function(){
-        message_area.innerHTML = `${enemy.name} intends to ${enemyMove.Intent} for ${enemyMove.for}<br />What will you do?<brWhat will you do?`;
+        message_area.innerHTML = `<br />${enemy.name} intends to ${enemyMove.Intent} for ${enemyMove.for}<br />What will you do?<brWhat will you do?`;
     }
     ,1000);
     
@@ -1039,7 +1051,7 @@ function fight(player, enemy){
         defend_btn.removeEventListener("click", handleClickDefend);
 
 
-        let result = (combatTurn(enemy, playerTurn(player, "attacking"), enemyMove));
+        let result = (combatTurn(enemy, playerTurn(player, "attack"), enemyMove));
 
         
         if (result.battleOver === true){
@@ -1050,7 +1062,7 @@ function fight(player, enemy){
             setTimeout(function() {
                 attack_btn.addEventListener("click", handleClickAttack);
                 defend_btn.addEventListener("click", handleClickDefend);
-                message_area.innerHTML = `${enemy.name} intends to ${enemyMove.Intent} for ${enemyMove.for}<br />What will you do?`;
+                message_area.innerHTML = `<br />${enemy.name} intends to ${enemyMove.Intent} for ${enemyMove.for}<br />What will you do?`;
             }, 1500);
         }
     }
