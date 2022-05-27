@@ -27,12 +27,12 @@ As a user I want to
 ## Wireframes:
 
 ### Start screen
-
-### Move screen
-
+![Image of start screen concept screen]()
+### Main gameplay screen
+![Image of main screen]()
 ### Fight screen
-
+![Image of fight screen]()
 ### Win screen
-
+![Image of win screen]()
 ### Lose screen
-
+![Image of lose screen]()
