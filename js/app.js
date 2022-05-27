@@ -25,6 +25,9 @@ let displayMessage = document.getElementById("message")
 let inv_item1 = document.querySelector("#item1 img");
 let inv_item2 = document.querySelector("#item2 img");
 let inv_item3 = document.querySelector("#item3 img");
+let item_Qty1 = document.getElementById("itemQty1")
+let item_Qty2 = document.getElementById("itemQty2")
+let item_Qty3 = document.getElementById("itemQty3")
 //
 
 // === *** SECTION: Global Variables === *** //
@@ -326,12 +329,16 @@ function playerInventory_getImg() {
             let itemInSlot = player.equiped[`item${i}`];
             let itemInSlotInfo = items[`${itemInSlot[0]}`];
             let itemInSlotName = itemInSlotInfo[`${itemInSlot[1]}`];
+            let itemInSlotQty = itemInSlot[2];
             if (i === 1) {
                 inv_item1.src = `${itemInSlotName.imgSrc}`;
+                item_Qty1.textContent = `x${itemInSlotQty}`
             } else if (i === 2) {
                 inv_item2.src = `${itemInSlotName.imgSrc}`;
+                item_Qty2.textContent = `x${itemInSlotQty}`
             } else if (i === 3) {
                 inv_item3.src = `${itemInSlotName.imgSrc}`;
+                item_Qty3.textContent = `x${itemInSlotQty}`
             }
         }
     }
@@ -375,6 +382,7 @@ inv_item1.addEventListener("click",function() {
             if (itemInSlotName.onUse(player) != false){
                 message_area.innerHTML = `You use ${itemInSlotName.name}`
                 player.equiped[`item1`][2] -= 1;
+                item_Qty1.textContent = `x${player.equiped[`item1`][2]}`;
                 if (player.equiped[`item1`][2] > 0){
                     return
                 } else {
@@ -408,8 +416,14 @@ inv_item2.addEventListener("click",function() {
             // run what item does.
             if (itemInSlotName.onUse(player) != false){
                 message_area.innerHTML = `You use ${itemInSlotName.name}`
-                player.equiped[`item2`] = null;
-                inv_item2.src = "";
+                player.equiped[`item2`][2] -= 1;
+                item_Qty1.textContent = `x${player.equiped[`item2`][2]}`;
+                if (player.equiped[`item2`][2] > 0){
+                    return
+                } else {
+                    player.equiped[`item2`] = null;
+                    inv_item1.src = "";
+                }
             }
             setTimeout(function() {
                 message_area.innerHTML = "You continue to traverse the cave.";
@@ -436,9 +450,15 @@ inv_item3.addEventListener("click",function() {
         } else {
             // run what item does.
             if (itemInSlotName.onUse(player) != false){
-                message_area.innerHTML = `You use ${itemInSlotName}`
-                player.equiped[`item3`] = null;
-                inv_item3.src = "";
+                message_area.innerHTML = `You use ${itemInSlotName.name}`
+                player.equiped[`item3`][2] -= 1;
+                item_Qty3.textContent = `x${player.equiped[`item3`][2]}`;
+                if (player.equiped[`item3`][2] > 0){
+                    return
+                } else {
+                    player.equiped[`item3`] = null;
+                    inv_item1.src = "";
+                }
             }
             setTimeout(function() {
                 message_area.innerHTML = "You continue to traverse the cave.";

@@ -256,6 +256,10 @@ body {
     background-color: rgba(59, 135, 216, 0.102);
 }
 
+.itemQty {
+    position: absolute;
+}
+
 #fight-btns {
     position: absolute;
     bottom: 12.5px;
