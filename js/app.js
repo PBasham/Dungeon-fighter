@@ -223,23 +223,27 @@ class Boundry {
 }
 
 
-let items = {
-    potions: 
-    {
-        potion_healing: 
-        {
-            imgSrc: "./imgs/Items/potion_health_1.png",
-            value: 10
-        }
-    },
-    thrown:
-    {
-        bomb: {
-            imgSrc: "./imgs/Items/bomb.png",
-            damage: 4
-        }
-    }
-}
+// let items = {
+//     potions: 
+//     {
+//         potion_healing: 
+//         {
+//             imgSrc: "./imgs/Items/potion_health_1.png",
+//             value: 10,
+//             canUseAnytime: true,
+//             onUse: player.health += 5
+//         }
+//     },
+//     thrown:
+//     {
+//         bomb: {
+//             imgSrc: "./imgs/Items/bomb.png",
+//             damage: 4,
+//             canUseAnytime: false,
+//             onUse: null
+//         }
+//     }
+// }
 // audio setup
 // ==== **** **** ==== //
 aud_quickKnifeSlash = new Audio("./music/sound_effects/short-knife-whoosh-fx.wav")
@@ -295,17 +299,46 @@ function loadUp() {
 };
 loadUp();
 
-function playerInventory() {
-    console.log(inv_item1)
+let items = {
+    potions: 
+    {
+        potion_healing: 
+        {
+            imgSrc: "./imgs/Items/potion_health_1.png",
+            value: 10,
+            canUseAnytime: true,
+            onUse(entity) {
+                if (entity.health === entity.maxHealth) {
+                    message_area.innerHTML = "You don't need this right now.";
+                    return false;
+                }
+                if (entity.health + 5 >= entity.maxHealth) {
+                    entity.health = entity.maxHealth
+                } else {
+                    entity.health += 5
+                }
+                // change health bar
+                playerHealth.style.width = ((player.health / player.maxHealth) * 100) + "%";
+            }
+        }
+    },
+    thrown:
+    {
+        bomb: {
+            imgSrc: "./imgs/Items/bomb.png",
+            damage: 4,
+            canUseAnytime: false,
+            onUse: null
+        }
+    }
+}
+
+function playerInventory_getImg() {
     for (let i = 1;i <= 3; i++){
         if (player.equiped[`item${i}`] !== null){
             let itemInSlot = player.equiped[`item${i}`];
-            console.log(itemInSlot)
             let itemInSlotInfo = items[`${itemInSlot[0]}`];
-            console.log(itemInSlotInfo);
             let itemInSlotName = itemInSlotInfo[`${itemInSlot[1]}`];
-            console.log(itemInSlotName);
-            console.log(`${itemInSlotName.imgSrc}`);
             if (i === 1) {
                 inv_item1.src = `${itemInSlotName.imgSrc}`;
             } else if (i === 2) {
@@ -313,12 +346,13 @@ function playerInventory() {
             } else if (i === 3) {
                 inv_item3.src = `${itemInSlotName.imgSrc}`;
             }
-            console.log(inv_item1.src)
         }
     }
 
 }
-playerInventory();
+
+// SECTION: inventory usage outside of combat.
+playerInventory_getImg();
 
 instructions_btn.addEventListener("click",() => {
     instructionsPage.style.display = "block";
@@ -333,6 +367,100 @@ function startBtnClick() {
     startScreenTransition()
     musicLoopCave()
 }
+
+inv_item1.addEventListener("click",function() {
+    let itemInSlot = player.equiped[`item1`];
+    let itemInSlotInfo = items[`${itemInSlot[0]}`];
+    let itemInSlotName = itemInSlotInfo[`${itemInSlot[1]}`];
+
+    if (player.inFight === false) {
+        if (itemInSlot === null) {
+            return 
+        }
+        if (itemInSlotName.canUseAnytime === false) {
+            message_area.innerHTML = "You can't use this right now..."
+            setTimeout(function() {
+                message_area.innerHTML = "You continue to traverse the cave.";
+            },1000)
+            return
+        } else {
+            // run what item does.
+            if (itemInSlotName.onUse(player) != false){
+                message_area.innerHTML = "You use item"
+                player.equiped[`item1`] = null;
+                inv_item1.src = "";
+            }
+            setTimeout(function() {
+                message_area.innerHTML = "You continue to traverse the cave.";
+            },1000)
+        }
+
+    }
+})
+inv_item2.addEventListener("click",function() {
+    let itemInSlot = player.equiped[`item2`];
+    let itemInSlotInfo = items[`${itemInSlot[0]}`];
+    let itemInSlotName = itemInSlotInfo[`${itemInSlot[1]}`];
+
+    if (player.inFight === false) {
+        if (itemInSlot === null) {
+            return 
+        }
+        if (itemInSlotName.canUseAnytime === false) {
+            message_area.innerHTML = "You can't use this right now..."
+            setTimeout(function() {
+                message_area.innerHTML = "You continue to traverse the cave.";
+            },1000)
+            return
+        } else {
+            // run what item does.
+            if (itemInSlotName.onUse(player) != false){
+                message_area.innerHTML = "You use item"
+                player.equiped[`item1`] = null;
+                inv_item1.src = "";
+            }
+            setTimeout(function() {
+                message_area.innerHTML = "You continue to traverse the cave.";
+            },1000)
+        }
+
+    }
+})
+inv_item3.addEventListener("click",function() {
+    let itemInSlot = player.equiped[`item3`];
+    let itemInSlotInfo = items[`${itemInSlot[0]}`];
+    let itemInSlotName = itemInSlotInfo[`${itemInSlot[1]}`];
+
+    if (player.inFight === false) {
+        if (itemInSlot === null) {
+            return 
+        }
+        if (itemInSlotName.canUseAnytime === false) {
+            return 
+        }
+        if (player.equiped.item3.canUseAnytime === false) {
+            message_area.innerHTML = "You can't use this right now..."
+            setTimeout(function() {
+                message_area.innerHTML = "You continue to traverse the cave.";
+            },1000)
+            return
+        } else {
+            // run what item does.
+            if (itemInSlotName.onUse(player) != false){
+                message_area.innerHTML = "You use item"
+                player.equiped[`item1`] = null;
+                inv_item1.src = "";
+            }
+            setTimeout(function() {
+                message_area.innerHTML = "You continue to traverse the cave.";
+            },1000)
+        }
+
+    }
+})
+
+
+// ==== **** **** ==== //
 
 function startScreenTransition() {
     console.log("Start Game!");
