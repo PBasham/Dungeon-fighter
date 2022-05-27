@@ -33,9 +33,9 @@ As a user I want to
 ### Start screen
 ![Image of start screen concept screen]()
 ### Main gameplay screen
-![Image of main screen]()
+![Image of main screen]("imgs/ReadMe/wireframe_mainScreen.jpg")
 ### Fight screen
-![Image of fight screen]()
+![Image of fight screen]("imgs/ReadMe/wireframe_fightScreen.jpg")
 ### Win screen
 ![Image of win screen]()
 ### Lose screen
