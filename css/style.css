@@ -3,6 +3,8 @@
 
 :root {
     --color-interface-areas: rgb(0, 34, 55);
+    --style-box-inset: inset 0 0 20px 5px rgba(0,0,0,0.6);
+    --color-offwhite: rgb(255, 255, 255); 
 }
 *, 
 *::before, 
@@ -62,7 +64,7 @@ body {
     right: 0;
     height: 1008px;
     width: 1216px;
-    color: white;
+    color: var(--color-offwhite);
     font-size: 42px;
     background-color: rgb(224, 219, 122);
     z-index: 0;
@@ -81,7 +83,7 @@ body {
     right: 0;
     height: 1008px;
     width: 1216px;
-    color: white;
+    color: var(--color-offwhite);
     font-size: 42px;
     background-color: rgb(32, 88, 132);
     z-index: 0;
@@ -116,6 +118,7 @@ body {
     height: 150px;
     background-color: black;
     z-index: 7;
+    user-select: none;
 }
 
 #botBar {
@@ -150,7 +153,7 @@ body {
     position: absolute;
     top: 17.5px;
     Left: 25px;
-    color: white;
+    color: var(--color-offwhite);
     font-size: 28px;
 }
 
@@ -165,12 +168,24 @@ body {
 #health-outline{
     top: 50px;
     Left: 25px;
-    border: 2px solid white;
+    border: 2px solid var(--color-offwhite);
     background-color: black;
 }
 #health-fill {
     background-color: red;
 }
+
+#message-area {
+    position: absolute;
+    width: 600px;
+    height: 100px;
+    top: 8.5px;
+    left: 305px;
+    border: 6px solid black;
+    box-shadow: var(--style-box-inset);
+    background-color: var(--color-offwhite);
+}
+
 
 #enemy-info {
     position: absolute;
@@ -179,7 +194,7 @@ body {
 }
 #fight-enemyName {
     position: absolute;
-    color: white;
+    color: var(--color-offwhite);
 }
 #fight-enemyHealth-outline,
 #fight-enemyHealth-fill {
@@ -190,7 +205,7 @@ body {
 #fight-enemyHealth-outline {
     top: 2px;
     Left: 110px;
-    border: 2px solid white;
+    border: 2px solid var(--color-offwhite);
     background-color: black;
 }
 #fight-enemyHealth-fill {
@@ -212,7 +227,7 @@ body {
 .inventory-header {
     position: absolute;
     top: 0;
-    color: white;
+    color: var(--color-offwhite);
 }
 .inventory-slot,
 #item-area {
@@ -224,7 +239,7 @@ body {
     height: 90px;
     width: 90px;
     border: 3px solid black;
-    box-shadow: inset 0 0 20px 5px rgba(0,0,0,0.6);
+    box-shadow: var(--style-box-inset);
     background-color: rgb(255, 255, 255);    
 }
 #item-area {
@@ -248,7 +263,6 @@ body {
     left: 12.5px;
     height: 125px;
     width: 589.25px;
-    user-select: none;
     background-color: var(--color-interface-areas);
     opacity: 0;
     z-index: 8;
@@ -263,15 +277,17 @@ body {
     padding: auto;
     width: 150px;
     height: 75px;
-    color: white;
+    color: var(--color-offwhite);
     font-family: 'VT323', monospace;
     font-size: 48px;
     border: 4px solid rgb(255, 255, 255);
     background-color: rgb(23, 120, 152);
+    box-shadow: var(--style-box-inset);
     z-index: 8;
 }
 .active-btn:hover{
-    border: 8px solid rgb(8, 44, 152);
+    border: 4px solid rgb(9, 30, 94);
+    background-color: blue;
 }
 
 .inactive-btn{
@@ -288,7 +304,7 @@ body {
     text-align: center;
     font-family: 'VT323', monospace;
     font-size: 24px;
-    color: white;
+    color: var(--color-offwhite);
     border: none;
     background-color: rgb(25, 119, 159);
     transition: background-color ease-in-out 500ms;
@@ -308,7 +324,7 @@ body {
     left: 306px;
     height: 596px;
     width: 596px;
-    border: 4px solid rgb(237, 232, 232);
+    border: 4px solid var(--color-offwhite);
     border-radius: 10px;
     background-color: rgba(15, 60, 120, 0.966);
     user-select: none;
@@ -322,9 +338,9 @@ body {
     right: 4px;
     width: 30px;
     height: 30px;
-    color: rgb(237, 232, 232);
+    color: var(--color-offwhite);
     font-size: 32px;
-    border: 2px solid rgb(237, 232, 232);
+    border: 2px solid var(--color-offwhite);
     border-radius: 10px;
     box-shadow: inset 0 0 3px 1px rgba(0,0,0,0.6);
     background-color: rgb(218, 27, 27);
@@ -338,15 +354,15 @@ body {
 #instructions h2 {
     margin-top: 20px;
     margin-bottom: 10px;
-    color: rgb(237, 232, 232);
+    color: var(--color-offwhite);
 }
 #instructions p {
     margin: 0 30px;
-    color: rgb(237, 232, 232);
+    color: var(--color-offwhite);
     text-align: left;
 }
 #instructions h3 {
-    color: rgb(237, 232, 232);
+    color: var(--color-offwhite);
 }
 
 span#teal {
