@@ -373,7 +373,7 @@ inv_item1.addEventListener("click",function() {
         } else {
             // run what item does.
             if (itemInSlotName.onUse(player) != false){
-                message_area.innerHTML = `You use ${itemInSlotName}`
+                message_area.innerHTML = `You use ${itemInSlotName.name}`
                 player.equiped[`item1`][2] -= 1;
                 if (player.equiped[`item1`][2] > 0){
                     return
