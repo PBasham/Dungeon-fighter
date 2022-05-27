@@ -32,7 +32,6 @@ body {
 }
 
 #screen-start {
-    display: ; /* TEMP: */
     position: absolute;
     top: 0;
     left: 0;
@@ -58,7 +57,6 @@ body {
 
 /*====         Screens         ====*/
 #screen-win {
-    display: ;
     position: absolute;
     top: 0;
     right: 0;
@@ -77,7 +75,6 @@ body {
 }
 
 #screen-lose {
-    display: ;
     position: absolute;
     top: 0;
     right: 0;
@@ -97,7 +94,6 @@ body {
 
 
 #screen-fight {
-    display: ;
     position: absolute;
     top: 0; 
     left: 1216px;
@@ -319,9 +315,6 @@ body {
 .startScreen-btn:hover {
     background-color: rgb(60, 191, 230);
 }
-/* #instructions-btn {
-    height: 100px;
-} */
 
 #instructions {
     display: none;
