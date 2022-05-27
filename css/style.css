@@ -255,7 +255,14 @@ body {
     border-radius: 40%;
     background-color: rgba(59, 135, 216, 0.102);
 }
-
+.equipmentRange {
+    position: absolute;
+    text-align: left;
+    width: 50px;
+    height: 25px;
+    font-size: 20px;
+    color: black;
+}
 .itemQty {
     position: absolute;
 }

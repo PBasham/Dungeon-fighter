@@ -25,9 +25,11 @@ let displayMessage = document.getElementById("message")
 let inv_item1 = document.querySelector("#item1 img");
 let inv_item2 = document.querySelector("#item2 img");
 let inv_item3 = document.querySelector("#item3 img");
-let item_Qty1 = document.getElementById("itemQty1")
-let item_Qty2 = document.getElementById("itemQty2")
-let item_Qty3 = document.getElementById("itemQty3")
+let item_Qty1 = document.getElementById("itemQty1");
+let item_Qty2 = document.getElementById("itemQty2");
+let item_Qty3 = document.getElementById("itemQty3");
+let damage_range = document.getElementById("damageRange");
+let block_range = document.getElementById("blockRange");
 //
 
 // === *** SECTION: Global Variables === *** //
@@ -342,7 +344,8 @@ function playerInventory_getImg() {
             }
         }
     }
-
+    damageRange.textContent = `[${player.attack}]`
+    blockRange.textContent = `[${player.defence}]`
 }
 
 // SECTION: inventory usage outside of combat.
