@@ -2,10 +2,10 @@
 
 # Premise:
 
-This game is about a hero tavling through a dungeon to defeat the dastardly orc keeping your friend prisioner! 
+> This game is about a hero tavling through a dungeon to defeat the dastardly orc keeping your friend prisioner! 
 
-'''
-##User Story  
+
+> ## User Story  
 As a user I want to
 1. See a start screen that will allow "Embark into the dungeon" or click on "Instructions" to learn how to play.
 2. Be able to transition from the start screen to the game screen.
