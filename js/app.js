@@ -141,6 +141,7 @@ class Lootable {
         this.locked = locked;
         this.contains = contains;
         this.looted = false;
+        this.opened = false;
         this.visible = true;
         this.LotSprite = new Image(); 
         this.LotSprite.src = imgSrc;
@@ -223,27 +224,7 @@ class Boundry {
 }
 
 
-// let items = {
-//     potions: 
-//     {
-//         potion_healing: 
-//         {
-//             imgSrc: "./imgs/Items/potion_health_1.png",
-//             value: 10,
-//             canUseAnytime: true,
-//             onUse: player.health += 5
-//         }
-//     },
-//     thrown:
-//     {
-//         bomb: {
-//             imgSrc: "./imgs/Items/bomb.png",
-//             damage: 4,
-//             canUseAnytime: false,
-//             onUse: null
-//         }
-//     }
-// }
+
 // audio setup
 // ==== **** **** ==== //
 aud_quickKnifeSlash = new Audio("./music/sound_effects/short-knife-whoosh-fx.wav");
@@ -283,7 +264,7 @@ function loadUp() {
     {
         weapon: "basic-sword" ,
         defenceItem: "basic-shield",
-        item1: [`potions`,"potion_healing", 1],
+        item1: [`potions`,"healingOne", 1],
         item2: ["thrown","bomb", 1],
         item3: null
     }, []);
@@ -292,8 +273,8 @@ function loadUp() {
     orc2 = new Entity("Orc", "./imgs/Enemies/Orc1.png",31, 11, "darkGreen", 1, 1, 10, 10, [1,3], 3, {weapon: "mace", defenceItem: "none"}, ["mace","leather tunic"]);
     AngryOrc = new Entity("Angry Orc", "./imgs/Enemies/Orc2.png", 17, 14, "#083a10", 1, 1,15, 15, [2,4], 2,{weapon: "better-mace", defenceItem: "none"}, ["better-mace", "leather pants"]);
     // create lootables
-    chest = new Lootable("Silver Chest", "./imgs/lootables/chest/silverChest.jpg", 3, 14, 0, "silver", 2, 1, false, "better-sword");
-    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, "even-better-sword");
+    chest = new Lootable("Silver Chest", "./imgs/lootables/chest/silverChest.jpg", 3, 14, 0, "silver", 2, 1, false, [["potions","healingOne", 1]]);
+    chest2 = new Lootable("Golden Chest", "./imgs/lootables/chest/goldChest.png",18, 13, 90, "gold", 1, 2, true, [["weapon","even-better-sword"]]);
 
     prisoner1 = new Prisoner("Steve","./imgs/prisoner/prisoner.png",{x:30,y: 16}, {w:1,h: 1})    // set boundries to walls
     message_area.innerHTML = `You enter the cave`
@@ -307,8 +288,8 @@ loadUp();
 let items = {
     potions: 
     {
-        potion_healing: 
-        {
+        healingOne: {
+            name:"Healing Potion",
             imgSrc: "./imgs/Items/potion_health_1.png",
             value: 10,
             canUseAnytime: true,
@@ -330,6 +311,7 @@ let items = {
     thrown:
     {
         bomb: {
+            name:"Bomb",
             imgSrc: "./imgs/Items/bomb.png",
             damage: 4,
             canUseAnytime: false,
@@ -391,9 +373,14 @@ inv_item1.addEventListener("click",function() {
         } else {
             // run what item does.
             if (itemInSlotName.onUse(player) != false){
-                message_area.innerHTML = "You use item"
-                player.equiped[`item1`] = null;
-                inv_item1.src = "";
+                message_area.innerHTML = `You use ${itemInSlotName}`
+                player.equiped[`item1`][2] -= 1;
+                if (player.equiped[`item1`][2] > 0){
+                    return
+                } else {
+                    player.equiped[`item1`] = null;
+                    inv_item1.src = "";
+                }
             }
             setTimeout(function() {
                 message_area.innerHTML = "You continue to traverse the cave.";
@@ -420,9 +407,9 @@ inv_item2.addEventListener("click",function() {
         } else {
             // run what item does.
             if (itemInSlotName.onUse(player) != false){
-                message_area.innerHTML = "You use item"
-                player.equiped[`item1`] = null;
-                inv_item1.src = "";
+                message_area.innerHTML = `You use ${itemInSlotName.name}`
+                player.equiped[`item2`] = null;
+                inv_item2.src = "";
             }
             setTimeout(function() {
                 message_area.innerHTML = "You continue to traverse the cave.";
@@ -441,9 +428,6 @@ inv_item3.addEventListener("click",function() {
             return 
         }
         if (itemInSlotName.canUseAnytime === false) {
-            return 
-        }
-        if (player.equiped.item3.canUseAnytime === false) {
             message_area.innerHTML = "You can't use this right now..."
             setTimeout(function() {
                 message_area.innerHTML = "You continue to traverse the cave.";
@@ -452,9 +436,9 @@ inv_item3.addEventListener("click",function() {
         } else {
             // run what item does.
             if (itemInSlotName.onUse(player) != false){
-                message_area.innerHTML = "You use item"
-                player.equiped[`item1`] = null;
-                inv_item1.src = "";
+                message_area.innerHTML = `You use ${itemInSlotName}`
+                player.equiped[`item3`] = null;
+                inv_item3.src = "";
             }
             setTimeout(function() {
                 message_area.innerHTML = "You continue to traverse the cave.";
@@ -1162,25 +1146,83 @@ function lootCheck(player, lootable) {
 }
 
 function looting(lootable) {
-
+    let addedItem = false;
+    let lootedItemName = lootable.contains[0][1];
+    let lootedItemType = lootable.contains[0][0];
+    let lootedItemQty = lootable.contains[0][2];
+    let emptySpot = false;
+    let usedKey = false;
+    // if the lootable was already looted, do not run this code.
     if (lootable.looted) {
         return;
     }
-    if (!lootable.locked){
-        lootable.looted = true;
-        // lootable.loot();
-        aud_chest_open.play();
-        return console.log(`You loot the chest and get ${lootable.contains}`);
-    } else if (player.Keys > 0){
-        player.Keys--;
-        lootable.looted = true;
-        // lootable.loot();
+    // check if its locked, if so, use a key if availible.
+    if(lootable.locked) {
+        if (player.Keys > 0){
+            player.Keys--;
         aud_chest_unlock.play();
-        return console.log(`You unlocked the chest!\nThis chest contains ${lootable.contains}\nYou have ${player.Keys} keys remainng.`);
-    } else {
-        aud_chest_locked.play();
-        return console.log("You need a key to open this chest!");
+        lootable.opened = true;
+        usedKey = true;
+        }else {
+            aud_chest_locked.play();
+            message_area.innerHTML = `You need a key to open this chest!`;
+            return console.log("You need a key to open this chest!");
+        }
     }
+    if (lootable.opened === false) {
+        aud_chest_open.play();
+    }
+    // see what item is in lootable
+    // check if item exist in player inventory
+    for (let i = 1; i <= 3; i++){
+        let currentSlot = player.equiped[`item${i}`]; 
+        console.log(currentSlot);
+        
+        if (currentSlot != null && currentSlot[1] === lootedItemName) {
+            console.log("this can stack into this inventory")
+            if (currentSlot[2] >= 0){
+                currentSlot[2] += lootedItemQty;
+                message_area.innerHTML = `You add ${lootedItemQty} ${items[lootedItemType][lootedItemName].name} to your inventory.`
+                console.log(currentSlot);
+                playerInventory_getImg();
+                addedItem = true;
+                break;
+            } else {
+                console.log("Error with lootable");
+            }
+        } else if (currentSlot === null){
+            emptySpot = true;
+        }
+    }
+    console.log("Need to search for empty spot then.");
+    if (addedItem === false && emptySpot === true) {
+        for (let i = 1; i <= 3; i++){
+            let currentSlot = player.equiped[`item${i}`]; 
+            console.log(currentSlot);
+            
+            if (currentSlot === null) {
+                console.log("this can stack into this inventory")
+                currentSlot = [lootedItemType, lootedItemName, lootedItemQty]
+                message_area.innerHTML = `You add ${lootedItemQty} ${items[lootedItemType][lootedItemName].name} to your inventory.`
+                console.log(currentSlot);
+                playerInventory_getImg();
+                break;
+            } else {
+                console.log("Error with lootable");
+            }
+
+        }
+    }
+
+
+        lootable.looted = true;
+        message_area.innerHTML = `You unlocked the chest!<br /> You got chest ${lootedItemQty}${items[lootedItemType][lootedItemName].name}<br />You have ${player.Keys} keys remainng.`
+
+        setTimeout(function() {
+            message_area.innerHTML = "You continue to traverse the cave.";
+        },1000)
+        return
+     
 }
 
 // SECTION: GameLoop ========================================//
