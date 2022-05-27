@@ -297,12 +297,6 @@ body {
 .startScreen-btn:hover {
     background-color: rgb(60, 191, 230);
 }
-#instructions-btn {
-    display: none;
-}
-#instructions-btn:checked ~ .instructions-btn-label{
-    background-color: green;
-}
 
 #instructions {
     display: none;
