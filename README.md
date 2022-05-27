@@ -1,14 +1,8 @@
-<style>
-    orc {color: green}
-    player {color: teal}
-    prisoner {color: yellow}
-</style>
-
 # Dungeon Fighter:
 
 # Premise:
 
-This game is about a hero tavling through a dungeon to defeat the dastardly <green>orcs</green> keeping your friend prisioner! 
+This game is about a hero tavling through a dungeon to defeat the dastardly <span style="color: green;">orcs</span> keeping your friend prisioner! 
 
 <!-- add reference links here to all sections-->
 ---
