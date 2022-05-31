@@ -31,10 +31,10 @@ As a user I want to
 ## Wireframes:
 
 ### Start screen
-![Image of start screen concept screen](imgs/ReadMe/wireframe_instructions.png)
+![Image of start screen concept screen](imgs/ReadMe/wireframe_startScreen.png)
 
 ### instructions
-![Image of instructions]()
+![Image of instructions](imgs/ReadMe/wireframe_instructions.png)
 
 ### Main gameplay screen
 ![Image of main screen](imgs/ReadMe/wireframe_mainScreen.jpg)
